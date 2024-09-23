@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'jacoco'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
 }
@@ -17,14 +18,27 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 }
 
 repositories {
+	maven {
+		url 'https://maven.aliyun.com/repository/public/'
+	}
+	maven {
+		url 'https://maven.aliyun.com/repository/spring/'
+	}
+	maven {
+		url 'https://maven.aliyun.com/repository/gradle-plugin'
+	}
+	mavenLocal()
 	mavenCentral()
 }
 
 ext {
 	set('springCloudVersion', "2023.0.3")
+	set('mapStructVersion', "1.5.5.Final")
+	set('lombokMapstructBindingVersion', "0.2.0")
 }
 
 dependencies {
@@ -32,12 +46,23 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-undertow'
 	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	//
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	//
+	implementation "org.mapstruct:mapstruct:${mapStructVersion}"
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
+	//
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	//
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.wiremock:wiremock:3.5.2'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -50,3 +75,5 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+apply from: 'jacoco-build.gradle'

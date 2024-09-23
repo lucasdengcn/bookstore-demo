@@ -1,0 +1,47 @@
+package com.example.demo.bookstore.model.input;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+import java.math.BigDecimal;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class BookCreateInput {
+
+    @Parameter(description = "Book's title", required = true, example = "Practice Java")
+    @NotEmpty(message = "please provide book's title")
+    @Length(max = 100, message = "book's title should be limited in 100 characters")
+    private String title;
+
+    @Parameter(description = "Book's author", required = true, example = "John Mark")
+    @NotEmpty(message = "please provide book's author")
+    @Length(max = 100, message = "book's author should be limited in 100 characters")
+    private String author;
+
+    @Parameter(description = "Book's amount", required = true, example = "100")
+    @Max(value = 1000, message = "book's amount up to 1000.")
+    @Min(value = 1, message = "book's amount should be in range from 1 to 1000.")
+    private int amount;
+
+    @Parameter(description = "Book's price", required = true, example = "50.20")
+    @NotNull(message = "please provide book's price")
+    @Min(value = 1, message = "book's price should be in range from 1 to 1000.")
+    private BigDecimal price;
+
+    @Parameter(description = "Book's category", required = true, example = "Java")
+    @NotEmpty(message = "please provide book's category")
+    @Length(max = 100, message = "book's category should be limited in 100 characters")
+    private String category;
+
+}

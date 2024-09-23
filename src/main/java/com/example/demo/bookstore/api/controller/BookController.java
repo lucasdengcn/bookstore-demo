@@ -1,0 +1,64 @@
+package com.example.demo.bookstore.api.controller;
+
+import com.example.demo.bookstore.entity.Book;
+import com.example.demo.bookstore.model.input.BookCreateInput;
+import com.example.demo.bookstore.model.output.BookInfo;
+import com.example.demo.bookstore.model.output.PageableOutput;
+import com.example.demo.bookstore.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Tag(name = "Book APIs")
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @Operation(description = "Create a book")
+    @PostMapping("/v1/")
+    public BookInfo create(@ParameterObject @Valid @RequestBody BookCreateInput input) {
+        BookInfo bookInfo = bookService.create(input);
+        return bookInfo;
+    }
+
+    @Operation(description = "Update book's information via id-based")
+    @PutMapping("/v1/{id}")
+    public BookInfo put(@PathVariable("id") Long id, @ParameterObject @Valid @RequestBody BookCreateInput input){
+        return null;
+    }
+
+    @Operation(description = "get available pageable books")
+    @GetMapping("/v1/{index}/{size}")
+    public PageableOutput<BookInfo> findAvailableBooks(@PathVariable("index") Integer index, @PathVariable("size") Integer size){
+        return null;
+    }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the book",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = BookInfo.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid id supplied", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Book not found", content = @Content)}
+    ) // @formatter:on
+    @Operation(description = "get a book's detail information")
+    @GetMapping("/v1/{id}")
+    public BookInfo getDetail(@PathVariable("id") Integer id){
+        return null;
+    }
+
+}

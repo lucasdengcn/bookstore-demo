@@ -1,3 +1,51 @@
-spring.application.name=bookstore-demo
 
+logging:
+  level:
+    root: INFO
+    org.hibernate: ERROR
+    org.hibernate.stat: INFO
+    org.hibernate.SQL: INFO
+    org.springframework: INFO
+    com.example.demo: INFO
 
+management:
+  endpoint:
+    health:
+      show-components: always
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,prometheus"
+  health:
+    defaults.enabled: false
+    ping.enabled: true
+    loggers.enabled: true
+    db.enabled: true
+
+server:
+  port: 8080
+  contextPath: /api
+  undertow:
+    options:
+      server:
+        record-request-start-time: true
+
+# swagger-ui custom path
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+spring:
+  mvc:
+    problemdetails:
+      enabled: true
+  application:
+    name: bookstore-demo
+  datasource:
+    url: jdbc:h2:file:./db/bookstore.db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
