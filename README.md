@@ -37,3 +37,45 @@ otherwise, then run
 ```shell
 ./gradlew clean bootRun
 ```
+
+## Api Specification
+
+The api specification is provided by Swagger UI. You can access it via http://localhost:8080/swagger-ui/index.html
+
+## How to run unit test?
+
+1. Clone this repository
+2. Run the following command in the root directory of the project
+
+```shell
+gradle clean test
+```
+
+otherwise, then run
+
+```shell
+./gradlew clean test
+```
+
+3. Test Report will be generated under
+
+```shell
+build/reports/tests/test/index.html
+```
+
+## How to run unit test with coverage?
+
+1. Clone this repository
+2. Run the following command in the root directory of the project
+
+```shell
+gradle clean jacocoTestReport
+```
+
+3.Coverage report will be generated under
+
+```shell
+build/reports/jacoco/test/index.html
+```
+
+
