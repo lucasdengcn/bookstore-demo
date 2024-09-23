@@ -3,16 +3,25 @@ package com.example.demo.bookstore.service;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.event.BookAddedIntoCart;
 import com.example.demo.bookstore.event.BookRemovedFromCart;
+import com.example.demo.bookstore.exception.EntityNotFoundException;
 import com.example.demo.bookstore.mapper.BookMapper;
 import com.example.demo.bookstore.model.input.BookCreateInput;
+import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 @Slf4j
 @Service
@@ -29,39 +38,75 @@ public class BookService {
 
     // create a book
     public BookInfo create(BookCreateInput input){
-        return null;
+        log.debug("create book: {}", input);
+        Book book = bookMapper.toBook(input);
+        book = bookRepository.save(book);
+        return bookMapper.toBookInfo(book);
     }
 
     // create a book
-    public BookInfo update(Integer id, BookCreateInput input){
-        return null;
+    public BookInfo update(Integer id, BookUpdateInput input){
+        log.debug("update book: {}, {}", id, input);
+        Book book = bookMapper.toBook(input, id);
+        book = bookRepository.save(book);
+        return bookMapper.toBookInfo(book);
     }
 
-    // find available book
+    /**
+     *
+     * @param page zero-based
+     * @param size
+     * @return
+     */
     public PageableOutput<BookInfo> findAvailableBooks(int page, int size){
-        return null;
+        //
+        Pageable pageable = PageRequest.ofSize(size).withPage(page).withSort(Sort.by(Sort.Order.desc("id")));
+        Page<Book> bookList = bookRepository.findByIsActive(true, pageable);
+        //
+        List<BookInfo> bookInfoList = bookMapper.toBookInfos(bookList.toList());
+        return new PageableOutput<BookInfo>(bookInfoList, bookList, page, size);
     }
 
-    // update book amounts
-    public BookInfo updateAmounts(Integer id, Integer amount) {
-        return null;
+    /**
+     * Offset book's amount
+     * @param id
+     * @param amount gte 0 means incr, lte 0 means decr.
+     * @return
+     * @throws EntityNotFoundException
+     */
+    public boolean offsetAmounts(Integer id, Integer amount) throws EntityNotFoundException {
+        log.info("try to offset amount of book id={}, change={}", id, amount);
+        bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
+        int result = bookRepository.offsetAmount(id, amount);
+        return result > 0;
     }
 
     // get book detail
     public BookInfo findById(Integer id){
-        return null;
+        Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
+        return bookMapper.toBookInfo(book);
     }
 
     @Async
     @TransactionalEventListener
     public void onBookAddedIntoCartEvent(BookAddedIntoCart event){
-
+        log.info("Receive added event: {}", event);
+        if (null != event){
+            if (event.getBookId() > 0 && event.getAmount() > 0){
+                offsetAmounts(event.getBookId(), -1 * event.getAmount());
+            }
+        }
     }
 
     @Async
     @TransactionalEventListener
     public void onBookRemovedFromCartEvent(BookRemovedFromCart event){
-
+        log.info("Receive removed event: {}", event);
+        if (null != event){
+            if (event.getBookId() > 0 && event.getAmount() > 0){
+                offsetAmounts(event.getBookId(), event.getAmount());
+            }
+        }
     }
 
 }

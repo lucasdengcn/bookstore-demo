@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookCreateInput {
+public class BookUpdateInput {
 
     @Parameter(description = "Book's title", required = true, example = "Practice Java")
     @NotEmpty(message = "please provide book's title")

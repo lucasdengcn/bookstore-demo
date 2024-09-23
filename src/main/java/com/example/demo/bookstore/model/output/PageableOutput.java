@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -29,5 +30,25 @@ public class PageableOutput<T> {
 
     @Schema(description = "the number of pages")
     private int totalPages;
+
+    @Schema(description = "would the list reach to the tail.")
+    private boolean hasNextPage;
+
+    @Schema(description = "would the list reach to the head.")
+    private boolean hasPreviousPage;
+
+    public PageableOutput(List<T> items) {
+        this.items = items;
+    }
+
+    public PageableOutput(List<T> items, Page<?> page, int pageIndex, int pageSize){
+        this.items = items;
+        this.pageSize = pageSize;
+        this.pageIndex = pageIndex;
+        this.totalItems = (int) page.getTotalElements();
+        this.totalPages = page.getTotalPages();
+        this.hasNextPage = page.hasNext();
+        this.hasPreviousPage = page.hasPrevious();
+    }
 
 }
