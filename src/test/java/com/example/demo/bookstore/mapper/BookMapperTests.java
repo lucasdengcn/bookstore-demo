@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,11 +87,11 @@ class BookMapperTests {
     @Test
     void test_book_to_bookInfo() {
         Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
-                .id(BOOK_ID)
+                .id(BOOK_ID).active(true)
                 .price(PRICE).amount(AMOUNT).build();
         //
         BookInfo bookInfo = BookInfo.builder().title(TITLE).author(AUTHOR)
-                .category(CATEGORY).price(PRICE)
+                .category(CATEGORY).price(PRICE).active(true)
                 .id(BOOK_ID).amount(AMOUNT).build();
         //
         BookInfo bookMapperBookInfo = bookMapper.toBookInfo(book);
@@ -110,13 +109,13 @@ class BookMapperTests {
     void test_books_to_bookInfos() {
         List<Book> bookList = List.of(
                 Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
-                        .id(BOOK_ID)
+                        .id(BOOK_ID).active(true)
                         .price(PRICE).amount(AMOUNT).build()
         );
         //
         List<BookInfo> bookInfoList = List.of(
                 BookInfo.builder().title(TITLE).author(AUTHOR)
-                        .category(CATEGORY).price(PRICE)
+                        .category(CATEGORY).price(PRICE).active(true)
                         .id(BOOK_ID).amount(AMOUNT).build()
         );
         //

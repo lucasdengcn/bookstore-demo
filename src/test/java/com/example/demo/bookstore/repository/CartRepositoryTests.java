@@ -39,11 +39,13 @@ class CartRepositoryTests {
         bookInit = Book.builder().title(randomTitle())
                 .id(faker.random().nextInt(100, 100000))
                 .author("James smith").category("JAVA")
-                .isActive(true)
-                .amount(100).price(BigDecimal.valueOf(50.20))
+                .active(true)
+                .amount(100)
+                .price(BigDecimal.valueOf(50.20))
                 .build();
         //
-        cartInit = Cart.builder().price(bookInit.getPrice())
+        cartInit = Cart.builder()
+                .price(bookInit.getPrice())
                 .bookId(bookInit.getId())
                 .amount(0)
                 .userId(CartService.currentUserId)
@@ -59,10 +61,11 @@ class CartRepositoryTests {
 
     @Test
     void test_create_cart(){
-        Cart cart = Cart.builder().price(BigDecimal.valueOf(10.0))
+        Cart cart = Cart.builder()
+                .price(BigDecimal.valueOf(10.0))
                 .bookId(faker.random().nextInt(1, 100000))
                 .amount(0)
-                .userId(faker.random().nextInt(1, 10000))
+                .userId(faker.random().nextInt(1002, 10000))
                 .total(BigDecimal.ZERO)
                 .build();
         cartRepository.save(cart);
@@ -84,6 +87,9 @@ class CartRepositoryTests {
         //
         Cart cart = cartRepository.findById(cartInit.getId()).orElseThrow();
         Assertions.assertEquals(2, cart.getAmount());
+        //
+        BigDecimal total = cart.getPrice().multiply(BigDecimal.TWO);
+        Assertions.assertEquals(total, cart.getTotal());
     }
 
     @Test
@@ -96,6 +102,9 @@ class CartRepositoryTests {
         cartRepository.offsetAmount(cartInit.getId(), -1);
         cart = cartRepository.findById(cartInit.getId()).orElseThrow();
         Assertions.assertEquals(1, cart.getAmount());
+        //
+        BigDecimal total = cart.getPrice().multiply(BigDecimal.ONE);
+        Assertions.assertEquals(total, cart.getTotal());
     }
 
     @Test
@@ -108,14 +117,17 @@ class CartRepositoryTests {
 
     @Test
     void test_sum_of_price_zero_when_empty(){
+        cartRepository.deleteAll();
         BigDecimal sum = cartRepository.getTotalPrice(cartInit.getUserId());
-        Assertions.assertEquals(BigDecimal.ZERO, sum);
+        Assertions.assertNull(sum);
     }
 
 
     @Test
     void test_sum_of_gte_zero_when_added(){
         cartRepository.offsetAmount(cartInit.getId(), 2);
+        Cart cart = cartRepository.findById(cartInit.getId()).orElseThrow();
+        System.out.println(cart);
         //
         BigDecimal sum = cartRepository.getTotalPrice(cartInit.getUserId());
         BigDecimal expected = cartInit.getPrice().multiply(BigDecimal.valueOf(2));

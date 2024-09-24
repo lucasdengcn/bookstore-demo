@@ -9,18 +9,18 @@ public class BookNotAvailableException extends RuntimeException {
         super("Book Not Available, id: " + bookId);
     }
 
-    /**
-     *
-     * @param id
-     * @return
-     */
-    public static Supplier<BookNotAvailableException> Create(Integer id){
-        return new Supplier<BookNotAvailableException>() {
-            @Override
-            public BookNotAvailableException get() {
-                return new BookNotAvailableException(id);
-            }
-        };
-    }
+//    /**
+//     *
+//     * @param id
+//     * @return
+//     */
+//    public static Supplier<BookNotAvailableException> Create(Integer id){
+//        return new Supplier<BookNotAvailableException>() {
+//            @Override
+//            public BookNotAvailableException get() {
+//                return new BookNotAvailableException(id);
+//            }
+//        };
+//    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.bookstore.api.controller;
 
-import com.example.demo.bookstore.model.input.CartInput;
+import com.example.demo.bookstore.model.input.CartCreateInput;
+import com.example.demo.bookstore.model.input.CartUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.CartInfo;
 import com.example.demo.bookstore.service.BookService;
@@ -32,7 +33,7 @@ public class CartController {
     @Operation(description = "Create a cart on current user")
     @PostMapping("/v1/book/")
     @ResponseStatus(HttpStatus.CREATED)
-    public CartInfo create(@ParameterObject @Valid @RequestBody CartInput input) {
+    public CartInfo create(@ParameterObject @Valid @RequestBody CartCreateInput input) {
         BookInfo bookInfo = bookService.findById(input.getBookId());
         return cartService.create(input, bookInfo);
     }
@@ -40,7 +41,7 @@ public class CartController {
     @Operation(description = "Update cart's amount of a book")
     @PutMapping("/v1/{id}/book")
     @ResponseStatus(HttpStatus.OK)
-    public CartInfo put(@PathVariable("id") Integer id, @ParameterObject @Valid @RequestBody CartInput input){
+    public CartInfo put(@PathVariable("id") Integer id, @ParameterObject @Valid @RequestBody CartUpdateInput input){
         return cartService.updateAmount(id, input.getAmount());
     }
 

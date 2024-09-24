@@ -3,9 +3,8 @@ package com.example.demo.bookstore.service;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.exception.BookNotAvailableException;
 import com.example.demo.bookstore.exception.EntityNotFoundException;
-import com.example.demo.bookstore.mapper.BookMapper;
 import com.example.demo.bookstore.mapper.CartMapper;
-import com.example.demo.bookstore.model.input.CartInput;
+import com.example.demo.bookstore.model.input.CartCreateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.CartInfo;
 import com.example.demo.bookstore.model.output.CartSummary;
@@ -23,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
@@ -38,6 +37,9 @@ class CartServiceTests {
     @MockBean
     CartRepository cartRepository;
 
+    @Autowired
+    BookRepository bookRepository;
+
     Faker faker = new Faker();
 
     int bookId = faker.random().nextInt(100, 10000);
@@ -47,13 +49,15 @@ class CartServiceTests {
     @Test
     void test_create_cart_first_time() {
         // Prepare
-        CartInput cartInput = CartInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(true)
+                .active(true)
                 .build();
+        Integer id = faker.random().nextInt(1, 10000);
         Cart cart = Cart.builder()
+                .id(id)
                 .price(bookInfo.getPrice())
                 .userId(currentUserId)
                 .bookId(bookId)
@@ -61,6 +65,7 @@ class CartServiceTests {
                                 .total(bookInfo.getPrice().multiply(BigDecimal.valueOf(cartInput.getAmount())))
                                         .build();
         CartInfo cartInfo = CartInfo.builder()
+                .id(id)
                 .price(bookInfo.getPrice())
                 .userId(currentUserId)
                 .bookId(bookId)
@@ -70,8 +75,8 @@ class CartServiceTests {
         //
         given(cartRepository.findByUserIdAndBookId(currentUserId, bookId)).willReturn(null);
         given(cartMapper.toCart(currentUserId, cartInput, bookInfo.getPrice())).willReturn(cart);
-        given(cartRepository.save(cart)).willReturn(cart);
-        given(cartMapper.toCartInfo(cart)).willReturn(cartInfo);
+        given(cartRepository.save(any())).willReturn(cart);
+        given(cartMapper.toCartInfo(any())).willReturn(cartInfo);
         // execute
         CartInfo cartInfoSaved = cartService.create(cartInput, bookInfo);
         // assert
@@ -85,11 +90,11 @@ class CartServiceTests {
     @Test
     void test_create_cart_book_invalid_status_should_throw() {
         // Prepare
-        CartInput cartInput = CartInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(null)
+                .active(null)
                 .build();
         // execute
         Assertions.assertThrows(BookNotAvailableException.class, new Executable() {
@@ -103,11 +108,11 @@ class CartServiceTests {
     @Test
     void test_create_cart_book_inactive_should_throw() {
         // Prepare
-        CartInput cartInput = CartInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(false)
+                .active(false)
                 .build();
         // execute
         Assertions.assertThrows(BookNotAvailableException.class, new Executable() {
@@ -121,11 +126,11 @@ class CartServiceTests {
     @Test
     void test_create_cart_second_time() {
         // Prepare
-        CartInput cartInput = CartInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(true)
+                .active(true)
                 .build();
         Cart cart = Cart.builder()
                 .price(bookInfo.getPrice())
@@ -172,7 +177,7 @@ class CartServiceTests {
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(true)
+                .active(true)
                 .build();
         Integer id = faker.random().nextInt(10, 10000);
         Cart cart = Cart.builder()
@@ -214,7 +219,7 @@ class CartServiceTests {
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(true)
+                .active(true)
                 .build();
         Integer id = faker.random().nextInt(10, 10000);
         Cart cart = Cart.builder()
@@ -248,7 +253,7 @@ class CartServiceTests {
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
-                .isActive(true)
+                .active(true)
                 .build();
         Integer id = faker.random().nextInt(10, 10000);
         Cart cart = Cart.builder()

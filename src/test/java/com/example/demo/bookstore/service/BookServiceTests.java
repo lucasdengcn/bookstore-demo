@@ -103,10 +103,10 @@ class BookServiceTests {
     void test_deActive_book(){
         // Prepare
         Book book = Book.builder()
-                .id(BOOK_ID).isActive(false)
+                .id(BOOK_ID).active(false)
                 .build();
         BookInfo bookInfo = BookInfo.builder()
-                .isActive(false)
+                .active(false)
                 .id(BOOK_ID).build();
         //
         given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
@@ -115,17 +115,17 @@ class BookServiceTests {
         //expect
         BookInfo bookInfoUpdated = bookService.updateStatus(BOOK_ID, false);
         //assert
-        assertFalse(bookInfoUpdated.getIsActive());
+        assertFalse(bookInfoUpdated.getActive());
     }
 
     @Test
     void test_active_book(){
         // Prepare
         Book book = Book.builder()
-                .id(BOOK_ID).isActive(true)
+                .id(BOOK_ID).active(true)
                 .build();
         BookInfo bookInfo = BookInfo.builder()
-                .isActive(true)
+                .active(true)
                 .id(BOOK_ID).build();
         //
         given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
@@ -134,7 +134,7 @@ class BookServiceTests {
         //expect
         BookInfo bookInfoUpdated = bookService.updateStatus(BOOK_ID, true);
         //assert
-        assertTrue(bookInfoUpdated.getIsActive());
+        assertTrue(bookInfoUpdated.getActive());
     }
 
     @Test
@@ -155,7 +155,7 @@ class BookServiceTests {
                 .withSort(Sort.by(Sort.Order.desc("id")));
         //
         Page<Book> bookPage = new PageImpl(bookList, pageable, 1);
-        given(bookRepository.findByIsActive(true, pageable)).willReturn(bookPage);
+        given(bookRepository.findByActive(true, pageable)).willReturn(bookPage);
         given(bookMapper.toBookInfos(bookList)).willReturn(bookInfoList);
         //
         PageableOutput<BookInfo> availableBooks = bookService.findAvailableBooks(PAGE_NUMBER, PAGE_SIZE);
@@ -182,16 +182,9 @@ class BookServiceTests {
     }
 
     @Test
-    void test_offset_non_existing_book_will_throw_exception(){
-        // Given
-        given(bookRepository.findById(2)).willThrow(EntityNotFoundException.class);
-        //
-        Assertions.assertThrows(EntityNotFoundException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                bookService.offsetAmounts(2, 1);
-            }
-        });
+    void test_offset_non_existing_book_will_return_false(){
+        boolean result = bookService.offsetAmounts(2222222, 1);
+        Assertions.assertFalse(result);
     }
 
     @Test

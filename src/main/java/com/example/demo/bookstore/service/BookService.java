@@ -10,13 +10,16 @@ import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.repository.BookRepository;
+
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.List;
@@ -54,10 +57,10 @@ public class BookService {
     }
 
     // update a book status only
-    public BookInfo updateStatus(Integer id, boolean isActive){
-        log.debug("update book status: {}, {}", id, isActive);
+    public BookInfo updateStatus(Integer id, boolean active){
+        log.debug("update book status: {}, {}", id, active);
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
-        book.setActive(isActive);
+        book.setActive(active);
         book = bookRepository.save(book);
         return bookMapper.toBookInfo(book);
     }
@@ -71,7 +74,7 @@ public class BookService {
     public PageableOutput<BookInfo> findAvailableBooks(int page, int size){
         //
         Pageable pageable = PageRequest.ofSize(size).withPage(page).withSort(Sort.by(Sort.Order.desc("id")));
-        Page<Book> bookList = bookRepository.findByIsActive(true, pageable);
+        Page<Book> bookList = bookRepository.findByActive(true, pageable);
         //
         List<BookInfo> bookInfoList = bookMapper.toBookInfos(bookList.toList());
         return new PageableOutput<BookInfo>(bookInfoList, bookList, page, size);
@@ -84,9 +87,9 @@ public class BookService {
      * @return
      * @throws EntityNotFoundException
      */
+    @Transactional
     public boolean offsetAmounts(Integer id, Integer amount) throws EntityNotFoundException {
         log.info("try to offset amount of book id={}, change={}", id, amount);
-        bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
         int result = bookRepository.offsetAmount(id, amount);
         return result > 0;
     }
@@ -97,8 +100,7 @@ public class BookService {
         return bookMapper.toBookInfo(book);
     }
 
-    @Async
-    @TransactionalEventListener
+    @EventListener
     public void onBookAddedIntoCartEvent(BookAddedIntoCart event){
         log.info("Receive added event: {}", event);
         if (null != event){
@@ -108,8 +110,7 @@ public class BookService {
         }
     }
 
-    @Async
-    @TransactionalEventListener
+    @EventListener
     public void onBookRemovedFromCartEvent(BookRemovedFromCart event){
         log.info("Receive removed event: {}", event);
         if (null != event){

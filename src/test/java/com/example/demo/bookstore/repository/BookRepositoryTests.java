@@ -27,7 +27,7 @@ class BookRepositoryTests {
     public void setup(){
         bookInit = Book.builder().title(randomTitle())
                 .author("James smith").category("JAVA")
-                .isActive(true)
+                .active(true)
                 .amount(100).price(BigDecimal.valueOf(50.20))
                 .build();
         bookInit = bookRepository.save(bookInit);
@@ -49,7 +49,7 @@ class BookRepositoryTests {
     public void test_create_book(){
         Book book = Book.builder().title("book ABC V2")
                 .author("James smith").category("JAVA")
-                .isActive(true)
+                .active(true)
                 .amount(100).price(BigDecimal.valueOf(50.20))
                 .build();
         //
@@ -93,7 +93,7 @@ class BookRepositoryTests {
         int pageIndex = 0; // zero-based
         int pageSize = 10;
         Pageable pageable = PageRequest.ofSize(pageSize).withPage(pageIndex).withSort(Sort.by(Sort.Order.desc("id")));
-        Page<Book> bookList = bookRepository.findByIsActive(true, pageable);
+        Page<Book> bookList = bookRepository.findByActive(true, pageable);
         //
         System.out.println(bookList);
         //

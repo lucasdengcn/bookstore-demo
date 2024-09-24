@@ -41,6 +41,6 @@ public class BookInfo {
     private String category;
 
     @Schema(description = "book's status", example = "true or false")
-    private Boolean isActive;
+    private Boolean active;
 
 }

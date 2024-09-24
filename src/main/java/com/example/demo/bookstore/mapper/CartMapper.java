@@ -1,7 +1,7 @@
 package com.example.demo.bookstore.mapper;
 
 import com.example.demo.bookstore.entity.Cart;
-import com.example.demo.bookstore.model.input.CartInput;
+import com.example.demo.bookstore.model.input.CartCreateInput;
 import com.example.demo.bookstore.model.output.CartInfo;
 import org.mapstruct.Mapper;
 
@@ -16,7 +16,7 @@ public interface CartMapper {
      * @param price
      * @return
      */
-    Cart toCart(int userId, CartInput cartInput, BigDecimal price);
+    Cart toCart(int userId, CartCreateInput cartInput, BigDecimal price);
 
     /**
      *

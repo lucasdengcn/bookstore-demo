@@ -34,14 +34,14 @@ public class Book {
     @Column
     private BigDecimal price;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 10)
     private String category;
 
     @Column
     private int amount;
 
     @Column
-    private boolean isActive;
+    private boolean active;
 
     @CreationTimestamp
     @Column(updatable = false)
