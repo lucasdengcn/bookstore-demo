@@ -1,6 +1,8 @@
 package com.example.demo.bookstore.service;
 
 import com.example.demo.bookstore.entity.Book;
+import com.example.demo.bookstore.event.BookAddedIntoCart;
+import com.example.demo.bookstore.event.BookRemovedFromCart;
 import com.example.demo.bookstore.exception.EntityNotFoundException;
 import com.example.demo.bookstore.mapper.BookMapper;
 import com.example.demo.bookstore.model.input.BookCreateInput;
@@ -219,4 +221,25 @@ class BookServiceTests {
         });
     }
 
+    @Test
+    void test_on_add_into_cart_null_event(){
+        bookService.onBookAddedIntoCartEvent(null);
+    }
+
+    @Test
+    void test_on_add_into_cart_invalid_event(){
+        BookAddedIntoCart event = BookAddedIntoCart.builder().bookId(0).cartId(0).amount(0).price(BigDecimal.ZERO).build();
+        bookService.onBookAddedIntoCartEvent(event);
+    }
+
+    @Test
+    void test_on_remove_from_cart_null_event(){
+        bookService.onBookRemovedFromCartEvent(null);
+    }
+
+    @Test
+    void test_on_remove_from_cart_invalid_event(){
+        BookRemovedFromCart event = BookRemovedFromCart.builder().bookId(0).cartId(0).amount(0).build();
+        bookService.onBookRemovedFromCartEvent(event);
+    }
 }

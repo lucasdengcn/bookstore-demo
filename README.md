@@ -86,4 +86,7 @@ gradle clean jacocoTestReport
 build/reports/jacoco/test/index.html
 ```
 
+4.Report example as following
+
+![Report](./code-coverage.png)
 
