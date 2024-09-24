@@ -14,6 +14,7 @@ To simplify demo, here putting book service and cart service into one project.
 - Java 21
 - Spring Boot 3.3.4
 - Spring Data JPA
+- Spring Event
 - Hibernate
 - H2 Database
 - Lombok
