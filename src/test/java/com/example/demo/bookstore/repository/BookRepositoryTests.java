@@ -1,8 +1,8 @@
 package com.example.demo.bookstore.repository;
 
 import com.example.demo.bookstore.entity.Book;
+import net.datafaker.Faker;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @SpringBootTest
@@ -20,15 +19,23 @@ class BookRepositoryTests {
     @Autowired
     BookRepository bookRepository;
 
+    Faker faker = new Faker();
+
+    Book bookInit = null;
+
     @BeforeEach
     public void setup(){
-        //
-        Book book = Book.builder().title("book ABC")
+        bookInit = Book.builder().title(randomTitle())
                 .author("James smith").category("JAVA")
                 .isActive(true)
                 .amount(100).price(BigDecimal.valueOf(50.20))
                 .build();
-        bookRepository.save(book);
+        bookInit = bookRepository.save(bookInit);
+        System.out.println(bookInit);
+    }
+
+    private String randomTitle() {
+        return faker.lorem().characters(10, 100, true, true);
     }
 
     @AfterEach
@@ -56,7 +63,7 @@ class BookRepositoryTests {
     // test on create a book
     @Test
     public void test_deActive_book(){
-        Book book = bookRepository.findById(1).orElseThrow();
+        Book book = bookRepository.findById(bookInit.getId()).orElseThrow();
         //
         book.setActive(false);
         Book bookUpdated = bookRepository.save(book);
@@ -70,13 +77,13 @@ class BookRepositoryTests {
     // test on find a book
     @Test
     public void test_find_book(){
-        Book book = bookRepository.findByTitle("book ABC");
+        Book book = bookRepository.findByTitle(bookInit.getTitle());
         System.out.println(book);
         //
         Assertions.assertNotNull(book);
         Assertions.assertNotNull(book.getId());
-        Assertions.assertEquals(100, book.getAmount());
-        Assertions.assertEquals(BigDecimal.valueOf(50.20), book.getPrice());
+        Assertions.assertEquals(bookInit.getAmount(), book.getAmount());
+        Assertions.assertEquals(bookInit.getPrice(), book.getPrice());
         Assertions.assertTrue(book.isActive());
     }
 
@@ -94,10 +101,10 @@ class BookRepositoryTests {
         bookList.forEach(book -> Assertions.assertTrue(book.isActive()));
     }
 
-    // test on delete a book
+//    // test on delete a book
     @Test
     public void test_delete_book(){
-        Book book = bookRepository.findByTitle("book ABC");
+        Book book = bookRepository.findByTitle(bookInit.getTitle());
         //
         Assertions.assertNotNull(book);
         //
@@ -114,5 +121,39 @@ class BookRepositoryTests {
         Assertions.assertNull(book);
     }
 
+    @Test
+    public void test_incr_book_amount(){
+        int bookUpdated = bookRepository.offsetAmount(bookInit.getId(), 10);
+        //
+        Assertions.assertEquals(1, bookUpdated);
+        //
+        Book book = bookRepository.findById(bookInit.getId()).orElseThrow();
+        //
+        Assertions.assertEquals(110, book.getAmount());
+        Assertions.assertTrue(book.isActive());
+    }
 
+    @Test
+    public void test_decr_book_amount(){
+        int bookUpdated = bookRepository.offsetAmount(bookInit.getId(), -10);
+        //
+        Assertions.assertEquals(1, bookUpdated);
+        //
+        Book book = bookRepository.findById(bookInit.getId()).orElseThrow();
+        //
+        Assertions.assertEquals(90, book.getAmount());
+        Assertions.assertTrue(book.isActive());
+    }
+
+    @Test
+    public void test_oversell_book_amount(){
+        int bookUpdated = bookRepository.offsetAmount(bookInit.getId(), -1 * bookInit.getAmount());
+        //
+        Assertions.assertEquals(1, bookUpdated);
+        //
+        Book book = bookRepository.findById(bookInit.getId()).orElseThrow();
+        //
+        Assertions.assertEquals(0, book.getAmount());
+        Assertions.assertFalse(book.isActive());
+    }
 }

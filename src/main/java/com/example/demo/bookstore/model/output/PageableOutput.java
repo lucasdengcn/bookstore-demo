@@ -37,10 +37,6 @@ public class PageableOutput<T> {
     @Schema(description = "would the list reach to the head.")
     private boolean hasPreviousPage;
 
-    public PageableOutput(List<T> items) {
-        this.items = items;
-    }
-
     public PageableOutput(List<T> items, Page<?> page, int pageIndex, int pageSize){
         this.items = items;
         this.pageSize = pageSize;

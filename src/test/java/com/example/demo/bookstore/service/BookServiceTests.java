@@ -109,6 +109,7 @@ class BookServiceTests {
                 .isActive(false)
                 .id(BOOK_ID).build();
         //
+        given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
         given(bookRepository.save(book)).willReturn(book);
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
         //expect
@@ -124,9 +125,10 @@ class BookServiceTests {
                 .id(BOOK_ID).isActive(true)
                 .build();
         BookInfo bookInfo = BookInfo.builder()
-                .isActive(false)
+                .isActive(true)
                 .id(BOOK_ID).build();
         //
+        given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
         given(bookRepository.save(book)).willReturn(book);
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
         //expect
