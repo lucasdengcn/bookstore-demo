@@ -53,6 +53,20 @@ class BookRepositoryTests {
         Assertions.assertTrue(book.isActive());
     }
 
+    // test on create a book
+    @Test
+    public void test_deActive_book(){
+        Book book = bookRepository.findById(1).orElseThrow();
+        //
+        book.setActive(false);
+        Book bookUpdated = bookRepository.save(book);
+        //
+        Assertions.assertNotNull(bookUpdated.getId());
+        Assertions.assertFalse(bookUpdated.isActive());
+        Assertions.assertNotNull(bookUpdated.getPrice());
+        Assertions.assertTrue(bookUpdated.getAmount() > 0);
+    }
+
     // test on find a book
     @Test
     public void test_find_book(){

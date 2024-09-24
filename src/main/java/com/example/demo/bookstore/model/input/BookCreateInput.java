@@ -1,10 +1,7 @@
 package com.example.demo.bookstore.model.input;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,11 +21,13 @@ public class BookCreateInput {
     @Parameter(description = "Book's title", required = true, example = "Practice Java")
     @NotEmpty(message = "please provide book's title")
     @Length(max = 100, message = "book's title should be limited in 100 characters")
+    @Pattern(regexp = "[0-9a-zA-Z\\s]{1,100}", message = "book's title only allow alphabets and numbers")
     private String title;
 
     @Parameter(description = "Book's author", required = true, example = "John Mark")
     @NotEmpty(message = "please provide book's author")
-    @Length(max = 100, message = "book's author should be limited in 100 characters")
+    @Length(max = 20, message = "book's author should be limited in 20 characters")
+    @Pattern(regexp = "[0-9a-zA-Z\\s]{1,20}", message = "book's author only allow alphabets and numbers")
     private String author;
 
     @Parameter(description = "Book's amount", required = true, example = "100")
@@ -43,7 +42,8 @@ public class BookCreateInput {
 
     @Parameter(description = "Book's category", required = true, example = "Java")
     @NotEmpty(message = "please provide book's category")
-    @Length(max = 100, message = "book's category should be limited in 100 characters")
+    @Length(max = 10, message = "book's category should be limited in 10 characters")
+    @Pattern(regexp = "[0-9a-zA-Z\\s]{1,10}", message = "book's category only allow alphabets and numbers")
     private String category;
 
 }

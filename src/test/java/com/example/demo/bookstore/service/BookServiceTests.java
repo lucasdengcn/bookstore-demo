@@ -100,6 +100,42 @@ class BookServiceTests {
     }
 
     @Test
+    void test_deActive_book(){
+        // Prepare
+        Book book = Book.builder()
+                .id(BOOK_ID).isActive(false)
+                .build();
+        BookInfo bookInfo = BookInfo.builder()
+                .isActive(false)
+                .id(BOOK_ID).build();
+        //
+        given(bookRepository.save(book)).willReturn(book);
+        given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
+        //expect
+        BookInfo bookInfoUpdated = bookService.updateStatus(BOOK_ID, false);
+        //assert
+        assertFalse(bookInfoUpdated.getIsActive());
+    }
+
+    @Test
+    void test_active_book(){
+        // Prepare
+        Book book = Book.builder()
+                .id(BOOK_ID).isActive(true)
+                .build();
+        BookInfo bookInfo = BookInfo.builder()
+                .isActive(false)
+                .id(BOOK_ID).build();
+        //
+        given(bookRepository.save(book)).willReturn(book);
+        given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
+        //expect
+        BookInfo bookInfoUpdated = bookService.updateStatus(BOOK_ID, true);
+        //assert
+        assertTrue(bookInfoUpdated.getIsActive());
+    }
+
+    @Test
     void test_find_available_books(){
         // Prepare
         List<Book> bookList = List.of(

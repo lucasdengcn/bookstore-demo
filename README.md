@@ -7,6 +7,8 @@ This is a demo application for online bookstore, providing browsing, purchasing 
 It is built on top of Spring Boot framework, since Spring Boot is a great framework for building microservices quickly and easily,
 and also the Spring Community is very active and has a lot of great resources and outstanding solutions for common problems.
 
+To simplify demo, here putting book service and cart service into one project.
+
 ## Tech Stack
 
 - Java 21
@@ -20,6 +22,13 @@ and also the Spring Community is very active and has a lot of great resources an
 - Mapstruct
 - Swagger UI
 - Gradle
+- Flyway
+- RFC-9457
+
+## Error Response
+
+follow RFC-9457 `https://www.rfc-editor.org/rfc/rfc9457.html` specification to response with standard error output, it is clean and easier to align with Frontend or other integration point.
+
 
 ## How to run the application?
 

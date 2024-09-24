@@ -40,14 +40,24 @@ public class BookService {
     public BookInfo create(BookCreateInput input){
         log.debug("create book: {}", input);
         Book book = bookMapper.toBook(input);
+        book.setActive(true);
         book = bookRepository.save(book);
         return bookMapper.toBookInfo(book);
     }
 
-    // create a book
+    // update a book
     public BookInfo update(Integer id, BookUpdateInput input){
         log.debug("update book: {}, {}", id, input);
         Book book = bookMapper.toBook(input, id);
+        book = bookRepository.save(book);
+        return bookMapper.toBookInfo(book);
+    }
+
+    // update a book status only
+    public BookInfo updateStatus(Integer id, boolean isActive){
+        log.debug("update book status: {}, {}", id, isActive);
+        Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
+        book.setActive(isActive);
         book = bookRepository.save(book);
         return bookMapper.toBookInfo(book);
     }

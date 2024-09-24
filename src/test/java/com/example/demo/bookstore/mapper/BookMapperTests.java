@@ -4,13 +4,13 @@ import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.model.input.BookCreateInput;
 import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
-import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -137,7 +137,7 @@ class BookMapperTests {
     @Test
     void test_empty_books_to_bookInfos() {
         //
-        List<BookInfo> bookMapperBookInfos = bookMapper.toBookInfos(Lists.newArrayList());
+        List<BookInfo> bookMapperBookInfos = bookMapper.toBookInfos(new ArrayList<>());
         Assertions.assertTrue(bookMapperBookInfos.isEmpty());
     }
 

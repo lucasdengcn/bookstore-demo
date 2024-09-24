@@ -1,7 +1,7 @@
 package com.example.demo.bookstore.api.controller;
 
-import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.model.input.BookCreateInput;
+import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.service.BookService;
@@ -12,11 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Book APIs")
 @RestController
@@ -31,23 +28,25 @@ public class BookController {
 
     @Operation(description = "Create a book")
     @PostMapping("/v1/")
-    public BookInfo create(@ParameterObject @Valid @RequestBody BookCreateInput input) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookInfo create(@Valid @RequestBody BookCreateInput input) {
         BookInfo bookInfo = bookService.create(input);
         return bookInfo;
     }
 
     @Operation(description = "Update book's information via id-based")
     @PutMapping("/v1/{id}")
-    public BookInfo put(@PathVariable("id") Long id, @ParameterObject @Valid @RequestBody BookCreateInput input){
-        return null;
+    @ResponseStatus(HttpStatus.OK)
+    public BookInfo put(@PathVariable("id") Integer id, @Valid @RequestBody BookUpdateInput input){
+        return bookService.update(id, input);
     }
 
     @Operation(description = "get available pageable books")
     @GetMapping("/v1/{index}/{size}")
+    @ResponseStatus(HttpStatus.OK)
     public PageableOutput<BookInfo> findAvailableBooks(@PathVariable("index") Integer index, @PathVariable("size") Integer size){
-        return null;
+        return bookService.findAvailableBooks(index, size);
     }
-
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the book",
@@ -57,8 +56,9 @@ public class BookController {
     ) // @formatter:on
     @Operation(description = "get a book's detail information")
     @GetMapping("/v1/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public BookInfo getDetail(@PathVariable("id") Integer id){
-        return null;
+        return bookService.findById(id);
     }
 
 }
