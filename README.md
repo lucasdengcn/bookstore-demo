@@ -27,8 +27,11 @@ To simplify demo, here putting book service and cart service into one project.
 
 ## Error Response
 
-follow RFC-9457 `https://www.rfc-editor.org/rfc/rfc9457.html` specification to response with standard error output, it is clean and easier to align with Frontend or other integration point.
+follow [RFC-9457](https://www.rfc-editor.org/rfc/rfc9457.html) specification to response with standard error output, it is clean and easier to align with Frontend or other integration point.
 
+## Api Specification
+
+The api specification is provided by Swagger UI. You can access it via [API Specification](http://localhost:8080/swagger-ui/index.html)
 
 ## How to run the application?
 
@@ -46,10 +49,6 @@ otherwise, then run
 ```shell
 ./gradlew clean bootRun
 ```
-
-## Api Specification
-
-The api specification is provided by Swagger UI. You can access it via http://localhost:8080/swagger-ui/index.html
 
 ## How to run unit test?
 
