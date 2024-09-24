@@ -59,8 +59,44 @@ class CartControllerTests {
     void setUpBooks(){
         BookCreateInput bookCreateInput = BookCreateInput.builder()
                 .title(randomTitle()).author(faker.name().name()).category("Java")
-                .price(BigDecimal.valueOf(10.10)).amount(10).build();
+                .price(BigDecimal.valueOf(10.10)).amount(5).build();
         bookInfo = bookService.create(bookCreateInput);
+    }
+
+    @Test
+    void test_add_book_into_cart_and_check_book_status() throws Exception {
+        //
+        int amount = 5;
+        CartCreateInput input = CartCreateInput.builder().amount(amount).bookId(bookInfo.getId()).build();
+        String url = "/carts/v1/book/";
+        //
+        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input))
+                .accept(APPLICATION_JSON);
+        // execute and assert
+        mockMvc.perform(requestBuilder)
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(new ResultMatcher() {
+                    @Override
+                    public void match(MvcResult result) throws Exception {
+                        String content = result.getResponse().getContentAsString();
+                        CartInfo cartInfo = objectMapper.readValue(content, CartInfo.class);
+                        //
+                        Assertions.assertEquals(CartService.currentUserId, cartInfo.getUserId());
+                        Assertions.assertEquals(bookInfo.getId(), cartInfo.getBookId());
+                        Assertions.assertEquals(bookInfo.getPrice(), cartInfo.getPrice());
+                        Assertions.assertEquals(amount, cartInfo.getAmount());
+                        Assertions.assertEquals(bookInfo.getPrice(), cartInfo.getPrice());
+                        //
+                        BigDecimal total = bookInfo.getPrice().multiply(BigDecimal.valueOf(amount));
+                        Assertions.assertEquals(total, cartInfo.getTotal());
+                        //
+                        BookInfo bookInfoUpdated = bookService.findById(bookInfo.getId());
+                        Assertions.assertEquals(0, bookInfoUpdated.getAmount());
+                        Assertions.assertFalse(bookInfoUpdated.getActive());
+                    }
+                });
     }
 
     @Test
