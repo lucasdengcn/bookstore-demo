@@ -1,19 +1,34 @@
 package com.example.demo.bookstore.mapper;
 
-import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.entity.Cart;
-import com.example.demo.bookstore.model.input.BookCreateInput;
-import com.example.demo.bookstore.model.output.BookInfo;
+import com.example.demo.bookstore.model.input.CartInput;
+import com.example.demo.bookstore.model.output.CartInfo;
 import org.mapstruct.Mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CartMapper {
+    /**
+     * @param userId
+     * @param cartInput
+     * @param price
+     * @return
+     */
+    Cart toCart(int userId, CartInput cartInput, BigDecimal price);
 
-    Cart toCart(BookCreateInput input);
+    /**
+     *
+     * @param cart
+     * @return
+     */
+    CartInfo toCartInfo(Cart cart);
 
-    BookInfo toBookInfo(Book book);
-
-    List<BookInfo> toBookInfos(List<Book> books);
+    /**
+     *
+     * @param cartList
+     * @return
+     */
+    List<CartInfo> toCartInfos(List<Cart> cartList);
 }

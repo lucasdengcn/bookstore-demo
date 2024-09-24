@@ -22,4 +22,17 @@ public class EntityNotFoundException extends RuntimeException {
         };
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public static Supplier<EntityNotFoundException> CartNotFound(Integer id){
+        return new Supplier<EntityNotFoundException>() {
+            @Override
+            public EntityNotFoundException get() {
+                return new EntityNotFoundException("Cart Not Found with id: " + id);
+            }
+        };
+    }
 }

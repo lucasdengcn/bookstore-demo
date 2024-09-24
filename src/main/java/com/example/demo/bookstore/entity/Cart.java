@@ -38,7 +38,7 @@ public class Cart {
     private BigDecimal price;
 
     @Column
-    private int status;
+    private BigDecimal total;
 
     @CreationTimestamp
     @Column(updatable = false)
