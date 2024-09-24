@@ -14,7 +14,13 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Tag(name = "Shopping Cart APIs")
 @RestController
@@ -49,7 +55,16 @@ public class CartController {
     @GetMapping("/v1/books")
     @ResponseStatus(HttpStatus.OK)
     public List<CartInfo> findCartItems(){
-        return cartService.findByCurrentUser();
+        List<CartInfo> cartInfoList = cartService.findByCurrentUser();
+        //
+        Set<Integer> bookIds = cartInfoList.stream().map(CartInfo::getBookId).collect(Collectors.toSet());
+        List<BookInfo> bookInfos = bookService.findByIds(bookIds);
+        Map<Integer, BookInfo> bookInfoMap = new HashMap<>();
+        bookInfos.stream().forEach(bookInfo -> bookInfoMap.put(bookInfo.getId(), bookInfo));
+        //
+        cartInfoList.forEach(cartInfo -> cartInfo.setBookInfo(bookInfoMap.get(cartInfo.getBookId())));
+        //
+        return cartInfoList;
     }
 
 }

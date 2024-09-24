@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -86,7 +89,9 @@ public class CartService {
 
     public List<CartInfo> findByCurrentUser(){
         List<Cart> cartList = cartRepository.findByUserId(currentUserId);
-        return cartMapper.toCartInfos(cartList);
+        List<CartInfo> cartInfoList = cartMapper.toCartInfos(cartList);
+        //
+        return cartInfoList;
     }
 
     @Transactional

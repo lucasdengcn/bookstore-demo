@@ -22,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -118,6 +120,15 @@ public class BookService {
                 offsetAmounts(event.getBookId(), event.getAmount());
             }
         }
+    }
+
+    public List<BookInfo> findByIds(Set<Integer> bookIds) {
+        if (null == bookIds || bookIds.isEmpty()){
+            return Collections.emptyList();
+        }
+        //
+        List<Book> bookList = bookRepository.findAllById(bookIds);
+        return bookMapper.toBookInfos(bookList);
     }
 
 }

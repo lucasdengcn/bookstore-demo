@@ -6,9 +6,11 @@ import com.example.demo.bookstore.model.input.CartCreateInput;
 import com.example.demo.bookstore.model.input.CartUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.CartInfo;
+import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.repository.CartRepository;
 import com.example.demo.bookstore.service.BookService;
 import com.example.demo.bookstore.service.CartService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -365,6 +368,18 @@ class CartControllerTests {
                     @Override
                     public void match(MvcResult result) throws Exception {
                         String content = result.getResponse().getContentAsString();
+                        //
+                        TypeReference<List<CartInfo>> typeRef = new TypeReference<List<CartInfo>>() {};
+                        List<CartInfo> cartInfoList = objectMapper.readValue(content, typeRef);
+                        //
+                        cartInfoList.forEach(new Consumer<CartInfo>() {
+                            @Override
+                            public void accept(CartInfo cartInfo) {
+                                Assertions.assertNotNull(cartInfo.getBookInfo());
+                                Assertions.assertNotNull(cartInfo.getTotal());
+                                Assertions.assertNotNull(cartInfo.getPrice());
+                            }
+                        });
                     }
                 });
 
