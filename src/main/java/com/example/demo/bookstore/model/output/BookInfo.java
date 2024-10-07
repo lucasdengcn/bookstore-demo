@@ -43,4 +43,6 @@ public class BookInfo {
     @Schema(description = "book's status", example = "true or false")
     private Boolean active;
 
+    @Schema(description = "book's cover image", example = "http://image.example.com/a/1.png")
+    private String coverImageUrl;
 }

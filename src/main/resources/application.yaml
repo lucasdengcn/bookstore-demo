@@ -37,6 +37,10 @@ springdoc:
     path: /swagger-ui.html
 
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      location: temp/
   mvc:
     problemdetails:
       enabled: true
@@ -50,3 +54,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
+
+app:
+  file:
+    directory: public/images/

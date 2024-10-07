@@ -4,6 +4,7 @@ import com.example.demo.bookstore.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -71,6 +72,15 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     protected ResponseEntity<ProblemDetail> handleHttpMediaTypeNotAcceptableException(
             HttpMediaTypeNotAcceptableException ex, WebRequest request) {
+        log.error("Request Not Supported: ", ex);
+        ProblemDetail errorResponse = buildProblemDetail("Request Not Supported", ex, HttpStatus.NOT_ACCEPTABLE, request);
+        return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    protected ResponseEntity<ProblemDetail> httpMediaTypeNotSupportedException(
+            HttpMediaTypeNotSupportedException ex, WebRequest request) {
         log.error("Request Not Supported: ", ex);
         ProblemDetail errorResponse = buildProblemDetail("Request Not Supported", ex, HttpStatus.NOT_ACCEPTABLE, request);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.NOT_ACCEPTABLE);

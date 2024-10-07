@@ -50,4 +50,6 @@ public class Book {
     @UpdateTimestamp
     private LocalDateTime updateTimestamp;
 
+    @Column
+    private String coverImageUrl;
 }

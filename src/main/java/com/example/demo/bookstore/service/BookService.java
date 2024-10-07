@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.service;
 
+import com.example.demo.bookstore.configuration.BookstoreProperties;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.event.BookAddedIntoCart;
 import com.example.demo.bookstore.event.BookRemovedFromCart;
@@ -17,16 +18,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 
 @Slf4j
 @Service
@@ -36,9 +38,14 @@ public class BookService {
 
     private final BookMapper bookMapper;
 
-    public BookService(BookRepository bookRepository, BookMapper bookMapper) {
+    private final BookstoreProperties bookstoreProperties;
+
+    public BookService(BookRepository bookRepository,
+                       BookMapper bookMapper,
+                       BookstoreProperties bookstoreProperties) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
+        this.bookstoreProperties = bookstoreProperties;
     }
 
     // create a book
@@ -129,6 +136,25 @@ public class BookService {
         //
         List<Book> bookList = bookRepository.findAllById(bookIds);
         return bookMapper.toBookInfos(bookList);
+    }
+
+    @Transactional
+    public BookInfo create(BookCreateInput input, MultipartFile file) {
+        log.debug("create book with file: {}", input);
+        Book book = bookMapper.toBook(input);
+        book.setActive(true);
+        // save file to directory
+        try {
+            String directory = bookstoreProperties.getRelativePath() + file.getOriginalFilename();
+            Path outputPath = new File(directory).toPath();
+            Files.copy(file.getInputStream(), outputPath);
+            book.setCoverImageUrl(directory);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //
+        book = bookRepository.save(book);
+        return bookMapper.toBookInfo(book);
     }
 
 }
