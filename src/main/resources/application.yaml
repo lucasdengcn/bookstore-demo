@@ -9,7 +9,7 @@ logging:
     org.hibernate.stat: INFO
     org.hibernate.SQL: INFO
     org.springframework: INFO
-    com.example.demo: INFO
+    com.example.demo: DEBUG
     com.github.benmanes.caffeine: DEBUG
     org:
       springframework:

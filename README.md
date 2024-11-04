@@ -112,3 +112,7 @@ http://localhost:8080/actuator
 http://localhost:8080/actuator/refresh
 http://localhost:8080/actuator/health
 
+## Redis
+
+https://github.com/redis/lettuce/wiki/Connection-Pooling
+

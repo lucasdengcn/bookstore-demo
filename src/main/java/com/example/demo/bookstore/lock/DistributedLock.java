@@ -1,9 +1,11 @@
 package com.example.demo.bookstore.lock;
 
 import com.github.benmanes.caffeine.cache.*;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 @Slf4j
 @Component
@@ -22,14 +26,35 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
 
     private static final Duration TIMEOUT = Duration.ofSeconds(5);
 
-    @Autowired
-    StringRedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
 
-    Cache<String, DxLockInfo> dxLockInfoCache;
+    private final Cache<String, DxLockInfo> dxLockInfoCache;
 
-    ScheduledExecutorService cleanUp = Executors.newScheduledThreadPool(1);
+    private final ScheduledExecutorService cleanUp = Executors.newScheduledThreadPool(1);
+    private final Counter counterOnLockNew;
+    private final Counter counterOnLockReleased;
+    private final Counter counterOnLockRenew;
+    private final Gauge lockCurrentAlive;
+    private final AtomicInteger aliveLock = new AtomicInteger(0);
+    //
+    public DistributedLock(StringRedisTemplate redisTemplate, MeterRegistry registry){
+        this.redisTemplate = redisTemplate;
+        this.counterOnLockNew = Counter.builder("dx_lock_acquired_total")
+                .description("distributed lock number of created")
+                .register(registry);
+        this.counterOnLockReleased = Counter.builder("dx_lock_released_total")
+                .description("distributed lock number of released")
+                .register(registry);
+        this.counterOnLockRenew = Counter.builder("dx_lock_renew_total")
+                .description("distributed lock number of renew")
+                .register(registry);
+        this.lockCurrentAlive = Gauge.builder("dx_lock_alive", new Supplier<Number>() {
+            @Override
+            public Number get() {
+                return aliveLock.get();
+            }
+        }).description("distributed lock number of active").register(registry);
 
-    public DistributedLock(){
         // Evict based on a varying expiration policy
         this.dxLockInfoCache = Caffeine.newBuilder()
                 .expireAfter(new Expiry<String, DxLockInfo>() {
@@ -54,10 +79,14 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
         cleanUp.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                // log.info("auto cleanUp Locks");
+                long estimatedSize = dxLockInfoCache.estimatedSize();
+                if (estimatedSize == 0){
+                    return;
+                }
+                log.trace("lock in cache size: {}", estimatedSize);
                 dxLockInfoCache.cleanUp();
             }
-        }, 0, 1, TimeUnit.SECONDS);
+        }, 1, 1, TimeUnit.SECONDS);
 
     }
 
@@ -92,6 +121,8 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
         if (response){
             // monitor lock
             putLocal(duration, txId, businessKey);
+            counterOnLockNew.increment();
+            aliveLock.incrementAndGet();
             //
             return Optional.of(txId);
         }
@@ -129,8 +160,12 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      */
     public void forceRelease(String businessKey){
         String lockKey = getLockKey(businessKey);
-        redisTemplate.delete(lockKey);
-        removeLocal(businessKey);
+        Boolean result = redisTemplate.delete(lockKey);
+        if (null != result && result) {
+            removeLocal(businessKey);
+            counterOnLockReleased.increment();
+            aliveLock.decrementAndGet();
+        }
     }
 
     private void removeLocal(String businessKey) {
@@ -146,6 +181,9 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      */
     public boolean release(String businessKey, String txId) {
         String script = """
+                if redis.call("exists", KEYS[1]) == 0 then
+                    return -1
+                end
                 if redis.call("get",KEYS[1]) == ARGV[1] then
                     return redis.call("del", KEYS[1])
                 else
@@ -153,7 +191,9 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
                 end
                 """;
         String lockKey = getLockKey(businessKey);
-        //
+        // if key not exists (auto removed by redis) return -1
+        // if value not match return 0
+        // if key exits and value match return 1
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);
         Long result = redisTemplate.execute(redisScript, List.of(lockKey), txId);
         //
@@ -162,9 +202,11 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
             removeLocal(lockKey);
             return true;
         }
-        boolean success = result.intValue() > 0;
+        boolean success = result.intValue() != 0;
         if (success){
             removeLocal(lockKey);
+            counterOnLockReleased.increment();
+            aliveLock.decrementAndGet();
         }
         return success;
     }
@@ -197,6 +239,7 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
         boolean success = result.intValue() > 0;
         if (success){
             putLocal(duration, txId, lockKey);
+            counterOnLockRenew.increment();
         }
         return success;
     }
