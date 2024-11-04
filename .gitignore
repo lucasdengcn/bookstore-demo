@@ -39,4 +39,4 @@ out/
 
 db
 logs
-*.sh
+*.log

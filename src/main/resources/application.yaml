@@ -11,16 +11,22 @@ logging:
     org.springframework: INFO
     com.example.demo: INFO
     com.github.benmanes.caffeine: DEBUG
+    org:
+      springframework:
+        cloud:
+          context: INFO
 
 management:
   endpoint:
     health:
       show-components: always
       show-details: always
+    env:
+      post.enabled: true
   endpoints:
     web:
       exposure:
-        include: "health,info,metrics,prometheus,refresh"
+        include: "health,info,metrics,prometheus,refresh,env"
   health:
     defaults.enabled: false
     ping.enabled: true
@@ -50,6 +56,7 @@ spring:
       enabled: true
   application:
     name: bookstore-demo
+  #
   datasource:
     url: jdbc:h2:mem:bookstore.db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
     username: sa
@@ -59,12 +66,13 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
 
-app:
-  file:
-    directory: public/images/
-  rules: ${APP_RULES:default}
 
 spring.data.redis:
   database: 0
   url: redis://${REDIS_URL:localhost:6379}
   timeout: 60000
+
+spring.cloud.config:
+  enabled: false
+  import-check.enabled: false
+

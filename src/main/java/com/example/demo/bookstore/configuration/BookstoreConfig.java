@@ -1,18 +1,12 @@
 package com.example.demo.bookstore.configuration;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.annotation.Bean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-public class BookstoreConfig {
+import java.io.File;
 
-    @Bean
-    @ConfigurationProperties("app")
-    @RefreshScope
-     public BookstoreProperties bookstoreProperties(){
-        return new BookstoreProperties();
-    }
+@Configuration
+@Slf4j
+public class BookstoreConfig {
 
 }
