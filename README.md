@@ -116,3 +116,11 @@ http://localhost:8080/actuator/health
 
 https://github.com/redis/lettuce/wiki/Connection-Pooling
 
+## Capabilities
+
+- Global Exception Handler
+- Entity Convertor
+- Distributed Lock
+- Custom Metrics
+- Auto reload yaml file and refresh properties bean
+
