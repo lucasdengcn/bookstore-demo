@@ -1,5 +1,8 @@
 
 logging:
+  file:
+    name: app.log
+    path: ./logs
   level:
     root: INFO
     org.hibernate: ERROR
@@ -7,6 +10,7 @@ logging:
     org.hibernate.SQL: INFO
     org.springframework: INFO
     com.example.demo: INFO
+    com.github.benmanes.caffeine: DEBUG
 
 management:
   endpoint:
@@ -16,7 +20,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,info,metrics,prometheus"
+        include: "health,info,metrics,prometheus,refresh"
   health:
     defaults.enabled: false
     ping.enabled: true
@@ -58,3 +62,9 @@ spring:
 app:
   file:
     directory: public/images/
+  rules: ${APP_RULES:default}
+
+spring.data.redis:
+  database: 0
+  url: redis://${REDIS_URL:localhost:6379}
+  timeout: 60000

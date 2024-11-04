@@ -106,3 +106,9 @@ build/reports/jacoco/test/index.html
 
 ![Report](./code-coverage.png)
 
+## Actuator
+
+http://localhost:8080/actuator
+http://localhost:8080/actuator/refresh
+http://localhost:8080/actuator/health
+

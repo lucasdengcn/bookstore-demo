@@ -20,9 +20,9 @@ class BookstoreConfigTests {
     @Test
     public void test_config_value() throws IOException {
         assertNotNull(bookstoreProperties);
-        assertNotNull(bookstoreProperties.file);
-        assertNotNull(bookstoreProperties.file.getDirectory());
-        assertEquals("public/images/", bookstoreProperties.file.getDirectory());
+        assertNotNull(bookstoreProperties.getFile());
+        assertNotNull(bookstoreProperties.getFile().getDirectory());
+        assertEquals("public/images/", bookstoreProperties.getFile().getDirectory());
         System.out.println(bookstoreProperties.getRelativePath());
     }
 
