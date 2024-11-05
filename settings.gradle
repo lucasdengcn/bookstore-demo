@@ -1,11 +1,11 @@
 pluginManagement {
-    repositories {
-        maven {
-            url 'https://maven.aliyun.com/repository/gradle-plugin'
-        }
-        mavenCentral()
-        gradlePluginPortal()
-    }
+	repositories {
+		maven {
+			url 'https://maven.aliyun.com/repository/gradle-plugin'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
 }
 
 rootProject.name = 'bookstore-demo'

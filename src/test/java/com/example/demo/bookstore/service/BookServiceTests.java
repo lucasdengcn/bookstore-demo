@@ -1,4 +1,9 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.service;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
@@ -11,21 +16,15 @@ import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.repository.BookRepository;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 class BookServiceTests extends DemoTestsBase {
 
@@ -42,7 +41,6 @@ class BookServiceTests extends DemoTestsBase {
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_NUMBER = 0;
 
-
     @Autowired
     BookService bookService;
 
@@ -56,105 +54,129 @@ class BookServiceTests extends DemoTestsBase {
     void test_create_book() {
         // Prepare
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(TITLE).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
                 .id(BOOK_ID)
-                .price(PRICE).amount(AMOUNT).build();
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        BookInfo bookInfo = BookInfo.builder().title(TITLE).author(AUTHOR)
-                .category(CATEGORY).price(PRICE)
-                .id(BOOK_ID).amount(AMOUNT).build();
+        BookInfo bookInfo = BookInfo.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .id(BOOK_ID)
+                .amount(AMOUNT)
+                .build();
         //
         given(bookMapper.toBook(bookCreateInput)).willReturn(book);
         given(bookRepository.save(book)).willReturn(book);
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
-        //expect
+        // expect
         BookInfo bookInfoCreated = bookService.create(bookCreateInput);
-        //assert
+        // assert
         Assertions.assertEquals(bookInfo, bookInfoCreated);
     }
 
-
     @Test
-    void test_update_book(){
+    void test_update_book() {
         // Prepare
         BookUpdateInput bookUpdateInput = BookUpdateInput.builder()
-                .title(TITLE_V2).author(AUTHOR).category(CATEGORY)
-                .price(PRICE_V2).amount(AMOUNT_V2).build();
+                .title(TITLE_V2)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE_V2)
+                .amount(AMOUNT_V2)
+                .build();
         //
-        Book book = Book.builder().title(TITLE_V2).author(AUTHOR).category(CATEGORY)
+        Book book = Book.builder()
+                .title(TITLE_V2)
+                .author(AUTHOR)
+                .category(CATEGORY)
                 .id(BOOK_ID)
-                .price(PRICE_V2).amount(AMOUNT).build();
+                .price(PRICE_V2)
+                .amount(AMOUNT)
+                .build();
         //
-        BookInfo bookInfo = BookInfo.builder().title(TITLE_V2).author(AUTHOR)
-                .category(CATEGORY).price(PRICE_V2)
-                .id(BOOK_ID).amount(AMOUNT_V2).build();
+        BookInfo bookInfo = BookInfo.builder()
+                .title(TITLE_V2)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE_V2)
+                .id(BOOK_ID)
+                .amount(AMOUNT_V2)
+                .build();
         //
         given(bookMapper.toBook(bookUpdateInput, BOOK_ID)).willReturn(book);
         given(bookRepository.save(book)).willReturn(book);
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
-        //expect
+        // expect
         BookInfo bookInfoUpdated = bookService.update(BOOK_ID, bookUpdateInput);
-        //assert
+        // assert
         Assertions.assertEquals(bookInfo, bookInfoUpdated);
     }
 
     @Test
-    void test_deActive_book(){
+    void test_deActive_book() {
         // Prepare
-        Book book = Book.builder()
-                .id(BOOK_ID).active(false)
-                .build();
-        BookInfo bookInfo = BookInfo.builder()
-                .active(false)
-                .id(BOOK_ID).build();
+        Book book = Book.builder().id(BOOK_ID).active(false).build();
+        BookInfo bookInfo = BookInfo.builder().active(false).id(BOOK_ID).build();
         //
         given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
         given(bookRepository.save(book)).willReturn(book);
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
-        //expect
+        // expect
         BookInfo bookInfoUpdated = bookService.updateStatus(BOOK_ID, false);
-        //assert
+        // assert
         assertFalse(bookInfoUpdated.getActive());
     }
 
     @Test
-    void test_active_book(){
+    void test_active_book() {
         // Prepare
-        Book book = Book.builder()
-                .id(BOOK_ID).active(true)
-                .build();
-        BookInfo bookInfo = BookInfo.builder()
-                .active(true)
-                .id(BOOK_ID).build();
+        Book book = Book.builder().id(BOOK_ID).active(true).build();
+        BookInfo bookInfo = BookInfo.builder().active(true).id(BOOK_ID).build();
         //
         given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
         given(bookRepository.save(book)).willReturn(book);
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
-        //expect
+        // expect
         BookInfo bookInfoUpdated = bookService.updateStatus(BOOK_ID, true);
-        //assert
+        // assert
         assertTrue(bookInfoUpdated.getActive());
     }
 
     @Test
-    void test_find_available_books(){
+    void test_find_available_books() {
         // Prepare
-        List<Book> bookList = List.of(
-            Book.builder().title(TITLE_V2).author(AUTHOR).category(CATEGORY)
-                    .id(BOOK_ID)
-                    .price(PRICE_V2).amount(AMOUNT).build()
-        );
-        List<BookInfo> bookInfoList = List.of(
-                BookInfo.builder().title(TITLE_V2).author(AUTHOR).category(CATEGORY)
-                        .id(BOOK_ID)
-                        .price(PRICE_V2).amount(AMOUNT).build()
-        );
-        Pageable pageable = PageRequest.ofSize(PAGE_SIZE)
-                .withPage(PAGE_NUMBER)
-                .withSort(Sort.by(Sort.Order.desc("id")));
+        List<Book> bookList = List.of(Book.builder()
+                .title(TITLE_V2)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .id(BOOK_ID)
+                .price(PRICE_V2)
+                .amount(AMOUNT)
+                .build());
+        List<BookInfo> bookInfoList = List.of(BookInfo.builder()
+                .title(TITLE_V2)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .id(BOOK_ID)
+                .price(PRICE_V2)
+                .amount(AMOUNT)
+                .build());
+        Pageable pageable =
+                PageRequest.ofSize(PAGE_SIZE).withPage(PAGE_NUMBER).withSort(Sort.by(Sort.Order.desc("id")));
         //
         Page<Book> bookPage = new PageImpl(bookList, pageable, 1);
         given(bookRepository.findByActive(true, pageable)).willReturn(bookPage);
@@ -169,11 +191,16 @@ class BookServiceTests extends DemoTestsBase {
     }
 
     @Test
-    void test_offset_amount_success(){
+    void test_offset_amount_success() {
         // Prepare
-        Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
                 .id(BOOK_ID)
-                .price(PRICE).amount(AMOUNT).build();
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         // Given
         given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
         given(bookRepository.offsetAmount(BOOK_ID, 1)).willReturn(1);
@@ -184,21 +211,31 @@ class BookServiceTests extends DemoTestsBase {
     }
 
     @Test
-    void test_offset_non_existing_book_will_return_false(){
+    void test_offset_non_existing_book_will_return_false() {
         boolean result = bookService.offsetAmounts(2222222, 1);
         Assertions.assertFalse(result);
     }
 
     @Test
-    void test_find_book_success(){
+    void test_find_book_success() {
         // Prepare
-        Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
                 .id(BOOK_ID)
-                .price(PRICE).amount(AMOUNT).build();
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        BookInfo bookInfo = BookInfo.builder().title(TITLE).author(AUTHOR)
-                .category(CATEGORY).price(PRICE)
-                .id(BOOK_ID).amount(AMOUNT).build();
+        BookInfo bookInfo = BookInfo.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .id(BOOK_ID)
+                .amount(AMOUNT)
+                .build();
         // Given
         given(bookRepository.findById(BOOK_ID)).willReturn(Optional.of(book));
         given(bookMapper.toBookInfo(book)).willReturn(bookInfo);
@@ -209,7 +246,7 @@ class BookServiceTests extends DemoTestsBase {
     }
 
     @Test
-    void test_find_non_existing_book_will_throw_exception(){
+    void test_find_non_existing_book_will_throw_exception() {
         // Given
         given(bookRepository.findById(2)).willThrow(EntityNotFoundException.class);
         //
@@ -222,24 +259,30 @@ class BookServiceTests extends DemoTestsBase {
     }
 
     @Test
-    void test_on_add_into_cart_null_event(){
+    void test_on_add_into_cart_null_event() {
         bookService.onBookAddedIntoCartEvent(null);
     }
 
     @Test
-    void test_on_add_into_cart_invalid_event(){
-        BookAddedIntoCart event = BookAddedIntoCart.builder().bookId(0).cartId(0).amount(0).price(BigDecimal.ZERO).build();
+    void test_on_add_into_cart_invalid_event() {
+        BookAddedIntoCart event = BookAddedIntoCart.builder()
+                .bookId(0)
+                .cartId(0)
+                .amount(0)
+                .price(BigDecimal.ZERO)
+                .build();
         bookService.onBookAddedIntoCartEvent(event);
     }
 
     @Test
-    void test_on_remove_from_cart_null_event(){
+    void test_on_remove_from_cart_null_event() {
         bookService.onBookRemovedFromCartEvent(null);
     }
 
     @Test
-    void test_on_remove_from_cart_invalid_event(){
-        BookRemovedFromCart event = BookRemovedFromCart.builder().bookId(0).cartId(0).amount(0).build();
+    void test_on_remove_from_cart_invalid_event() {
+        BookRemovedFromCart event =
+                BookRemovedFromCart.builder().bookId(0).cartId(0).amount(0).build();
         bookService.onBookRemovedFromCartEvent(event);
     }
 }

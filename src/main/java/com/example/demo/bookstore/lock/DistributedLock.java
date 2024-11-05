@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.lock;
 
 import com.github.benmanes.caffeine.cache.*;
@@ -5,11 +7,6 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.Nullable;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.stereotype.Component;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -19,12 +16,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class DistributedLock implements RemovalListener<String, DxLockInfo> {
-
-    private static final Duration TIMEOUT = Duration.ofSeconds(5);
 
     private final StringRedisTemplate redisTemplate;
 
@@ -34,10 +33,9 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
     private final Counter counterOnLockNew;
     private final Counter counterOnLockReleased;
     private final Counter counterOnLockRenew;
-    private final Gauge lockCurrentAlive;
     private final AtomicInteger aliveLock = new AtomicInteger(0);
     //
-    public DistributedLock(StringRedisTemplate redisTemplate, MeterRegistry registry){
+    public DistributedLock(StringRedisTemplate redisTemplate, MeterRegistry registry) {
         this.redisTemplate = redisTemplate;
         this.counterOnLockNew = Counter.builder("dx_lock_acquired_total")
                 .description("distributed lock number of created")
@@ -48,12 +46,15 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
         this.counterOnLockRenew = Counter.builder("dx_lock_renew_total")
                 .description("distributed lock number of renew")
                 .register(registry);
-        this.lockCurrentAlive = Gauge.builder("dx_lock_alive", new Supplier<Number>() {
-            @Override
-            public Number get() {
-                return aliveLock.get();
-            }
-        }).description("distributed lock number of active").register(registry);
+        //
+        Gauge.builder("dx_lock_alive", new Supplier<Number>() {
+                    @Override
+                    public Number get() {
+                        return aliveLock.get();
+                    }
+                })
+                .description("distributed lock number of active")
+                .register(registry);
 
         // Evict based on a varying expiration policy
         this.dxLockInfoCache = Caffeine.newBuilder()
@@ -61,12 +62,13 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
                     public long expireAfterCreate(String key, DxLockInfo graph, long currentTime) {
                         return graph.getDuration().minusSeconds(2).toNanos();
                     }
-                    public long expireAfterUpdate(String key, DxLockInfo graph,
-                                                  long currentTime, long currentDuration) {
+
+                    public long expireAfterUpdate(
+                            String key, DxLockInfo graph, long currentTime, long currentDuration) {
                         return currentDuration;
                     }
-                    public long expireAfterRead(String key, DxLockInfo graph,
-                                                long currentTime, long currentDuration) {
+
+                    public long expireAfterRead(String key, DxLockInfo graph, long currentTime, long currentDuration) {
                         return currentDuration;
                     }
                 })
@@ -76,18 +78,21 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
 
         log.info("DxLock in Cache: {}", dxLockInfoCache);
 
-        cleanUp.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                long estimatedSize = dxLockInfoCache.estimatedSize();
-                if (estimatedSize == 0){
-                    return;
-                }
-                log.trace("lock in cache size: {}", estimatedSize);
-                dxLockInfoCache.cleanUp();
-            }
-        }, 1, 1, TimeUnit.SECONDS);
-
+        cleanUp.scheduleAtFixedRate(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        long estimatedSize = dxLockInfoCache.estimatedSize();
+                        if (estimatedSize == 0) {
+                            return;
+                        }
+                        log.trace("lock in cache size: {}", estimatedSize);
+                        dxLockInfoCache.cleanUp();
+                    }
+                },
+                1,
+                1,
+                TimeUnit.SECONDS);
     }
 
     private String getLockKey(String businessKey) {
@@ -97,8 +102,7 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
     public Optional<DxLockInfo> findInCache(String businessKey) {
         String lockKey = getLockKey(businessKey);
         DxLockInfo present = dxLockInfoCache.getIfPresent(lockKey);
-        if (null == present)
-            return Optional.empty();
+        if (null == present) return Optional.empty();
         return Optional.of(present);
     }
 
@@ -109,16 +113,16 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      * @param duration
      * @return transaction id via random value
      */
-    public Optional<String> acquire(String businessKey, Duration duration){
+    public Optional<String> acquire(String businessKey, Duration duration) {
         String lockKey = getLockKey(businessKey);
         String txId = UUID.randomUUID() + ":" + businessKey;
         //
         Boolean response = redisTemplate.boundValueOps(lockKey).setIfAbsent(txId, duration);
         //
-        if (null == response){
+        if (null == response) {
             return Optional.empty();
         }
-        if (response){
+        if (response) {
             // monitor lock
             putLocal(duration, txId, businessKey);
             counterOnLockNew.increment();
@@ -144,11 +148,11 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      * @param txId
      * @return
      */
-    public int ttl(String businessKey, String txId){
+    public int ttl(String businessKey, String txId) {
         String lockKey = getLockKey(businessKey);
         Long expire = redisTemplate.boundValueOps(lockKey).getExpire();
         log.debug("ttl response: {}", expire);
-        if (null == expire){
+        if (null == expire) {
             return -2;
         }
         return expire.intValue();
@@ -158,7 +162,7 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      *
      * @param businessKey
      */
-    public void forceRelease(String businessKey){
+    public void forceRelease(String businessKey) {
         String lockKey = getLockKey(businessKey);
         Boolean result = redisTemplate.delete(lockKey);
         if (null != result && result) {
@@ -180,7 +184,8 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      * @return
      */
     public boolean release(String businessKey, String txId) {
-        String script = """
+        String script =
+                """
                 if redis.call("exists", KEYS[1]) == 0 then
                     return -1
                 end
@@ -198,12 +203,12 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
         Long result = redisTemplate.execute(redisScript, List.of(lockKey), txId);
         //
         log.debug("release response: {}, {}, {}", businessKey, txId, result);
-        if (null == result){
+        if (null == result) {
             removeLocal(lockKey);
             return true;
         }
         boolean success = result.intValue() != 0;
-        if (success){
+        if (success) {
             removeLocal(lockKey);
             counterOnLockReleased.increment();
             aliveLock.decrementAndGet();
@@ -220,7 +225,8 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
      * @return
      */
     public boolean renew(String businessKey, String txId, Duration duration) {
-        String script = """
+        String script =
+                """
                 if redis.call("get",KEYS[1]) == ARGV[1] then
                     return redis.call("expire", KEYS[1], ARGV[2])
                 else
@@ -233,11 +239,11 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
         Long result = redisTemplate.execute(redisScript, List.of(lockKey), txId, String.valueOf(duration.toSeconds()));
         //
         log.debug("renew response: {}, {}, {}", lockKey, txId, result);
-        if (null == result){
+        if (null == result) {
             return true;
         }
         boolean success = result.intValue() > 0;
-        if (success){
+        if (success) {
             putLocal(duration, txId, lockKey);
             counterOnLockRenew.increment();
         }
@@ -253,5 +259,4 @@ public class DistributedLock implements RemovalListener<String, DxLockInfo> {
             renew(key, value.getTxId(), value.getDuration());
         }
     }
-
 }

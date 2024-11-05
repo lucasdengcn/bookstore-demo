@@ -1,4 +1,10 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.controller;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Cart;
@@ -7,32 +13,25 @@ import com.example.demo.bookstore.model.input.CartCreateInput;
 import com.example.demo.bookstore.model.input.CartUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.CartInfo;
-import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.repository.CartRepository;
 import com.example.demo.bookstore.service.BookService;
 import com.example.demo.bookstore.service.CartService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.function.Consumer;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ProblemDetail;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.function.Consumer;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 class CartControllerTests extends DemoTestsBase {
@@ -59,10 +58,14 @@ class CartControllerTests extends DemoTestsBase {
     }
 
     @BeforeEach
-    void setUpBooks(){
+    void setUpBooks() {
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(randomTitle()).author(faker.name().name()).category("Java")
-                .price(BigDecimal.valueOf(10.10)).amount(5).build();
+                .title(randomTitle())
+                .author(faker.name().name())
+                .category("Java")
+                .price(BigDecimal.valueOf(10.10))
+                .amount(5)
+                .build();
         bookInfo = bookService.create(bookCreateInput);
     }
 
@@ -70,10 +73,14 @@ class CartControllerTests extends DemoTestsBase {
     void test_add_book_into_cart_and_check_book_status() throws Exception {
         //
         int amount = 5;
-        CartCreateInput input = CartCreateInput.builder().amount(amount).bookId(bookInfo.getId()).build();
+        CartCreateInput input = CartCreateInput.builder()
+                .amount(amount)
+                .bookId(bookInfo.getId())
+                .build();
         String url = "/carts/v1/book/";
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -105,10 +112,12 @@ class CartControllerTests extends DemoTestsBase {
     @Test
     void test_create_with_valid_input_on_first() throws Exception {
         //
-        CartCreateInput input = CartCreateInput.builder().amount(1).bookId(bookInfo.getId()).build();
+        CartCreateInput input =
+                CartCreateInput.builder().amount(1).bookId(bookInfo.getId()).build();
         String url = "/carts/v1/book/";
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -134,7 +143,8 @@ class CartControllerTests extends DemoTestsBase {
     @Test
     void test_create_with_valid_input_on_second() throws Exception {
         // Prepare a data
-        Cart cartInit = Cart.builder().price(bookInfo.getPrice())
+        Cart cartInit = Cart.builder()
+                .price(bookInfo.getPrice())
                 .bookId(bookInfo.getId())
                 .amount(1)
                 .userId(CartService.currentUserId)
@@ -143,10 +153,12 @@ class CartControllerTests extends DemoTestsBase {
         cartRepository.save(cartInit);
         //
         //
-        CartCreateInput input = CartCreateInput.builder().amount(1).bookId(bookInfo.getId()).build();
+        CartCreateInput input =
+                CartCreateInput.builder().amount(1).bookId(bookInfo.getId()).build();
         String url = "/carts/v1/book/";
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -175,10 +187,12 @@ class CartControllerTests extends DemoTestsBase {
     void test_create_with_invalid_input_should_return_400() throws Exception {
         //
         //
-        CartCreateInput input = CartCreateInput.builder().amount(10000).bookId(bookInfo.getId()).build();
+        CartCreateInput input =
+                CartCreateInput.builder().amount(10000).bookId(bookInfo.getId()).build();
         String url = "/carts/v1/book/";
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -199,10 +213,12 @@ class CartControllerTests extends DemoTestsBase {
     @Test
     void test_create_with_invalid_input2_should_return_400() throws Exception {
         //
-        CartCreateInput input = CartCreateInput.builder().amount(-10).bookId(bookInfo.getId()).build();
+        CartCreateInput input =
+                CartCreateInput.builder().amount(-10).bookId(bookInfo.getId()).build();
         String url = "/carts/v1/book/";
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -225,8 +241,9 @@ class CartControllerTests extends DemoTestsBase {
         // Prepare a Cart
         Cart cartInit = prepareCart();
         //
-        CartUpdateInput input = CartUpdateInput.builder().amount(1).bookId(bookInfo.getId()).build();
-        String url = "/carts/v1/"+cartInit.getId()+"/book";
+        CartUpdateInput input =
+                CartUpdateInput.builder().amount(1).bookId(bookInfo.getId()).build();
+        String url = "/carts/v1/" + cartInit.getId() + "/book";
         //
         MockHttpServletRequestBuilder requestBuilder = put(url).contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
@@ -258,7 +275,8 @@ class CartControllerTests extends DemoTestsBase {
     private Cart prepareCart() {
         Cart cartInit = cartRepository.findByUserIdAndBookId(CartService.currentUserId, bookInfo.getId());
         if (null == cartInit) {
-            cartInit = Cart.builder().price(bookInfo.getPrice())
+            cartInit = Cart.builder()
+                    .price(bookInfo.getPrice())
                     .bookId(bookInfo.getId())
                     .amount(1)
                     .userId(CartService.currentUserId)
@@ -274,8 +292,9 @@ class CartControllerTests extends DemoTestsBase {
         // Prepare a Cart
         Cart cartInit = prepareCart();
         //
-        CartUpdateInput input = CartUpdateInput.builder().amount(-1).bookId(bookInfo.getId()).build();
-        String url = "/carts/v1/"+cartInit.getId()+"/book";
+        CartUpdateInput input =
+                CartUpdateInput.builder().amount(-1).bookId(bookInfo.getId()).build();
+        String url = "/carts/v1/" + cartInit.getId() + "/book";
         //
         MockHttpServletRequestBuilder requestBuilder = put(url).contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input))
@@ -307,7 +326,8 @@ class CartControllerTests extends DemoTestsBase {
     @Test
     void test_change_cart_amount_invalid_input_should_400() throws Exception {
         //
-        CartUpdateInput input = CartUpdateInput.builder().amount(100).bookId(bookInfo.getId()).build();
+        CartUpdateInput input =
+                CartUpdateInput.builder().amount(100).bookId(bookInfo.getId()).build();
         String url = "/carts/v1/1/book";
         //
         MockHttpServletRequestBuilder requestBuilder = put(url).contentType(APPLICATION_JSON)
@@ -331,7 +351,8 @@ class CartControllerTests extends DemoTestsBase {
     @Test
     void test_change_cart_amount_invalid_input2_should_400() throws Exception {
         //
-        CartUpdateInput input = CartUpdateInput.builder().amount(-100).bookId(bookInfo.getId()).build();
+        CartUpdateInput input =
+                CartUpdateInput.builder().amount(-100).bookId(bookInfo.getId()).build();
         String url = "/carts/v1/1/book";
         //
         MockHttpServletRequestBuilder requestBuilder = put(url).contentType(APPLICATION_JSON)
@@ -352,14 +373,12 @@ class CartControllerTests extends DemoTestsBase {
                 });
     }
 
-
     @Test
     void test_find_current_user_carts() throws Exception {
 
         String url = "/carts/v1/books";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -382,6 +401,5 @@ class CartControllerTests extends DemoTestsBase {
                         });
                     }
                 });
-
     }
 }

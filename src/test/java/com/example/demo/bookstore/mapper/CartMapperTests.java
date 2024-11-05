@@ -1,17 +1,17 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.mapper;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.model.input.CartCreateInput;
 import com.example.demo.bookstore.model.output.CartInfo;
+import java.math.BigDecimal;
+import java.util.List;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 class CartMapperTests extends DemoTestsBase {
 
@@ -24,7 +24,8 @@ class CartMapperTests extends DemoTestsBase {
     void test_cart_input_to_cart() {
         // Prepare
         int userId = faker.random().nextInt(10, 10000);
-        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(123).build();
+        CartCreateInput cartInput =
+                CartCreateInput.builder().amount(1).bookId(123).build();
         //
         BigDecimal price = BigDecimal.valueOf(45.0);
         Cart cartInfo = cartMapper.toCart(userId, cartInput, price);
@@ -48,7 +49,8 @@ class CartMapperTests extends DemoTestsBase {
     void test_cart_input_null2_to_cart() {
         // Prepare
         int userId = faker.random().nextInt(10, 10000);
-        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(123).build();
+        CartCreateInput cartInput =
+                CartCreateInput.builder().amount(1).bookId(123).build();
         // execute
         Cart cartInfo = cartMapper.toCart(userId, cartInput, null);
         //
@@ -84,7 +86,6 @@ class CartMapperTests extends DemoTestsBase {
         //
         Assertions.assertNull(cartInfo);
     }
-
 
     @Test
     void test_carts_to_cartInfos() {

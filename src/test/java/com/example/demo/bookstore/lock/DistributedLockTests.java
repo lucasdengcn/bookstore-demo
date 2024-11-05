@@ -1,15 +1,16 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.lock;
 
 import com.example.demo.bookstore.DemoTestsBase;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class DistributedLockTests extends DemoTestsBase {
 
@@ -80,7 +81,6 @@ class DistributedLockTests extends DemoTestsBase {
         Assertions.assertFalse(release);
     }
 
-
     @Test
     void extend_lock_duration_on_success() {
         String businessKey = "6";
@@ -112,24 +112,24 @@ class DistributedLockTests extends DemoTestsBase {
         Optional<String> acquire = distributedLock.acquire(businessKey, Duration.ofSeconds(10));
         Assertions.assertTrue(acquire.isPresent());
         //
-//        Optional<DxLockInfo> dxLockInfo = distributedLock.findInCache(businessKey);
-//        Assertions.assertTrue(dxLockInfo.isPresent());
+        //        Optional<DxLockInfo> dxLockInfo = distributedLock.findInCache(businessKey);
+        //        Assertions.assertTrue(dxLockInfo.isPresent());
         // wait a while to let monitor to extend duration
         try {
             Thread.sleep(60_000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-//        //
-//        DxLockInfo dxLockInfo = distributedLock.findInCache(businessKey);
-//        Assertions.assertNull(dxLockInfo);
+        //        //
+        //        DxLockInfo dxLockInfo = distributedLock.findInCache(businessKey);
+        //        Assertions.assertNull(dxLockInfo);
         //
-//        int ttl = distributedLock.ttl(businessKey, acquire.get());
-//        Assertions.assertTrue(ttl > 6);
+        //        int ttl = distributedLock.ttl(businessKey, acquire.get());
+        //        Assertions.assertTrue(ttl > 6);
     }
 
     @Test
-    void expire_time(){
+    void expire_time() {
         Duration duration = Duration.ofSeconds(10).minusSeconds(5);
         System.out.println(duration.toSeconds());
         System.out.println(duration.toNanos());
@@ -140,5 +140,4 @@ class DistributedLockTests extends DemoTestsBase {
         long nanos = TimeUnit.MILLISECONDS.toNanos(seconds);
         System.out.println(nanos);
     }
-
 }

@@ -1,6 +1,11 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.handler;
 
 import com.example.demo.bookstore.exception.EntityNotFoundException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -12,10 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 @Slf4j
 @RestControllerAdvice
@@ -52,8 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseEntity<ProblemDetail> handleIllegalStateException(
-            IllegalStateException ex, WebRequest request) {
+    protected ResponseEntity<ProblemDetail> handleIllegalStateException(IllegalStateException ex, WebRequest request) {
         log.error("IllegalState: ", ex);
         ProblemDetail errorResponse = buildProblemDetail("IllegalState", ex, HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -73,7 +73,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ProblemDetail> handleHttpMediaTypeNotAcceptableException(
             HttpMediaTypeNotAcceptableException ex, WebRequest request) {
         log.error("Request Not Supported: ", ex);
-        ProblemDetail errorResponse = buildProblemDetail("Request Not Supported", ex, HttpStatus.NOT_ACCEPTABLE, request);
+        ProblemDetail errorResponse =
+                buildProblemDetail("Request Not Supported", ex, HttpStatus.NOT_ACCEPTABLE, request);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
@@ -82,7 +83,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ProblemDetail> httpMediaTypeNotSupportedException(
             HttpMediaTypeNotSupportedException ex, WebRequest request) {
         log.error("Request Not Supported: ", ex);
-        ProblemDetail errorResponse = buildProblemDetail("Request Not Supported", ex, HttpStatus.NOT_ACCEPTABLE, request);
+        ProblemDetail errorResponse =
+                buildProblemDetail("Request Not Supported", ex, HttpStatus.NOT_ACCEPTABLE, request);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
@@ -91,16 +93,17 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ProblemDetail> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException ex, WebRequest request) {
         log.error("Request Not Supported: ", ex);
-        ProblemDetail errorResponse = buildProblemDetail("Request Not Supported", ex, HttpStatus.METHOD_NOT_ALLOWED, request);
+        ProblemDetail errorResponse =
+                buildProblemDetail("Request Not Supported", ex, HttpStatus.METHOD_NOT_ALLOWED, request);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ResponseEntity<ProblemDetail> handleRuntimeException(
-            Exception ex, WebRequest request) {
+    protected ResponseEntity<ProblemDetail> handleRuntimeException(Exception ex, WebRequest request) {
         log.error("UnexpectedError: ", ex);
-        ProblemDetail errorResponse = buildProblemDetail("Request Error", ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
+        ProblemDetail errorResponse =
+                buildProblemDetail("Request Error", ex, HttpStatus.INTERNAL_SERVER_ERROR, request);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -116,5 +119,4 @@ public class GlobalExceptionHandler {
         errorResponse.setDetail(join);
         return new ResponseEntity<ProblemDetail>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
 }

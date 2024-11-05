@@ -1,4 +1,9 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.service;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Cart;
@@ -11,20 +16,15 @@ import com.example.demo.bookstore.model.output.CartInfo;
 import com.example.demo.bookstore.model.output.CartSummary;
 import com.example.demo.bookstore.repository.BookRepository;
 import com.example.demo.bookstore.repository.CartRepository;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 class CartServiceTests extends DemoTestsBase {
 
@@ -49,7 +49,8 @@ class CartServiceTests extends DemoTestsBase {
     @Test
     void test_create_cart_first_time() {
         // Prepare
-        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput =
+                CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
@@ -61,9 +62,9 @@ class CartServiceTests extends DemoTestsBase {
                 .price(bookInfo.getPrice())
                 .userId(currentUserId)
                 .bookId(bookId)
-                        .amount(cartInput.getAmount())
-                                .total(bookInfo.getPrice().multiply(BigDecimal.valueOf(cartInput.getAmount())))
-                                        .build();
+                .amount(cartInput.getAmount())
+                .total(bookInfo.getPrice().multiply(BigDecimal.valueOf(cartInput.getAmount())))
+                .build();
         CartInfo cartInfo = CartInfo.builder()
                 .id(id)
                 .price(bookInfo.getPrice())
@@ -90,7 +91,8 @@ class CartServiceTests extends DemoTestsBase {
     @Test
     void test_create_cart_book_invalid_status_should_throw() {
         // Prepare
-        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput =
+                CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
@@ -108,7 +110,8 @@ class CartServiceTests extends DemoTestsBase {
     @Test
     void test_create_cart_book_inactive_should_throw() {
         // Prepare
-        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput =
+                CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
@@ -126,7 +129,8 @@ class CartServiceTests extends DemoTestsBase {
     @Test
     void test_create_cart_second_time() {
         // Prepare
-        CartCreateInput cartInput = CartCreateInput.builder().amount(1).bookId(bookId).build();
+        CartCreateInput cartInput =
+                CartCreateInput.builder().amount(1).bookId(bookId).build();
         BookInfo bookInfo = BookInfo.builder()
                 .id(bookId)
                 .price(BigDecimal.valueOf(10.10))
@@ -165,7 +169,6 @@ class CartServiceTests extends DemoTestsBase {
         Assertions.assertEquals(cart.getUserId(), cartInfoSaved.getUserId());
         Assertions.assertEquals(cart.getPrice(), cartInfoSaved.getPrice());
     }
-
 
     @Test
     void delete() {
@@ -297,10 +300,9 @@ class CartServiceTests extends DemoTestsBase {
     }
 
     @Test
-    void test_calculate_summary_of_cart(){
+    void test_calculate_summary_of_cart() {
         given(cartRepository.getTotalPrice(currentUserId)).willReturn(BigDecimal.ONE);
         CartSummary summary = cartService.findByCurrentUserInSummary();
         Assertions.assertEquals(BigDecimal.ONE, summary.getTotal());
     }
-
 }

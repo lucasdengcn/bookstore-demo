@@ -1,13 +1,13 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.model.output;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Schema(description = "cart item information")
 @Data
@@ -36,5 +36,4 @@ public class CartInfo {
 
     @Schema(description = "item's information")
     private BookInfo bookInfo;
-
 }

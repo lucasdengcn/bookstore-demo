@@ -1,11 +1,12 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.lock;
 
+import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Duration;
 
 @Data
 @AllArgsConstructor

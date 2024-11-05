@@ -1,20 +1,20 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.mapper;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.model.input.BookCreateInput;
 import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class BookMapperTests extends DemoTestsBase {
 
@@ -32,11 +32,20 @@ class BookMapperTests extends DemoTestsBase {
     void test_create_input_to_book_entity() {
         // Prepare
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(TITLE).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
         Book mapperBook = bookMapper.toBook(bookCreateInput);
         Assertions.assertEquals(book, mapperBook);
@@ -49,17 +58,25 @@ class BookMapperTests extends DemoTestsBase {
         Assertions.assertNull(mapperBook);
     }
 
-
     @Test
     void test_update_input_to_book_entity() {
         // Prepare
         BookUpdateInput bookUpdateInput = BookUpdateInput.builder()
-                .title(TITLE).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
                 .id(BOOK_ID)
-                .price(PRICE).amount(AMOUNT).build();
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
         Book mapperBook = bookMapper.toBook(bookUpdateInput, BOOK_ID);
         Assertions.assertEquals(book, mapperBook);
@@ -83,16 +100,27 @@ class BookMapperTests extends DemoTestsBase {
         Assertions.assertNull(mapperBook.getCategory());
     }
 
-
     @Test
     void test_book_to_bookInfo() {
-        Book book = Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
-                .id(BOOK_ID).active(true)
-                .price(PRICE).amount(AMOUNT).build();
+        Book book = Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .id(BOOK_ID)
+                .active(true)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        BookInfo bookInfo = BookInfo.builder().title(TITLE).author(AUTHOR)
-                .category(CATEGORY).price(PRICE).active(true)
-                .id(BOOK_ID).amount(AMOUNT).build();
+        BookInfo bookInfo = BookInfo.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .active(true)
+                .id(BOOK_ID)
+                .amount(AMOUNT)
+                .build();
         //
         BookInfo bookMapperBookInfo = bookMapper.toBookInfo(book);
         Assertions.assertEquals(bookInfo, bookMapperBookInfo);
@@ -107,17 +135,25 @@ class BookMapperTests extends DemoTestsBase {
 
     @Test
     void test_books_to_bookInfos() {
-        List<Book> bookList = List.of(
-                Book.builder().title(TITLE).author(AUTHOR).category(CATEGORY)
-                        .id(BOOK_ID).active(true)
-                        .price(PRICE).amount(AMOUNT).build()
-        );
+        List<Book> bookList = List.of(Book.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .id(BOOK_ID)
+                .active(true)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build());
         //
-        List<BookInfo> bookInfoList = List.of(
-                BookInfo.builder().title(TITLE).author(AUTHOR)
-                        .category(CATEGORY).price(PRICE).active(true)
-                        .id(BOOK_ID).amount(AMOUNT).build()
-        );
+        List<BookInfo> bookInfoList = List.of(BookInfo.builder()
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .active(true)
+                .id(BOOK_ID)
+                .amount(AMOUNT)
+                .build());
         //
         List<BookInfo> bookMapperBookInfos = bookMapper.toBookInfos(bookList);
         //
@@ -139,5 +175,4 @@ class BookMapperTests extends DemoTestsBase {
         List<BookInfo> bookMapperBookInfos = bookMapper.toBookInfos(new ArrayList<>());
         Assertions.assertTrue(bookMapperBookInfos.isEmpty());
     }
-
 }

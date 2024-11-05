@@ -1,4 +1,11 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.model.input.BookCreateInput;
@@ -8,33 +15,20 @@ import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.service.BookService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
+import java.util.Objects;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.math.BigDecimal;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 class BookControllerTests extends DemoTestsBase {
@@ -70,10 +64,15 @@ class BookControllerTests extends DemoTestsBase {
         String url = "/books/v1/";
         // Prepare
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(randomTitle()).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(randomTitle())
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookCreateInput))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -100,16 +99,19 @@ class BookControllerTests extends DemoTestsBase {
         String url = "/books/v2/";
         // Prepare
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(randomTitle()).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(randomTitle())
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         String jsonValue = objectMapper.writeValueAsString(bookCreateInput);
         //
         MockPart file = new MockPart("file", "image.jpg", "image data".getBytes(), MediaType.MULTIPART_FORM_DATA);
         MockPart jsonPart = new MockPart("jsonData", "json", jsonValue.getBytes(), MediaType.APPLICATION_JSON);
         //
-        MockHttpServletRequestBuilder requestBuilder = multipart(url)
-                .part(file, jsonPart)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder =
+                multipart(url).part(file, jsonPart).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -138,10 +140,15 @@ class BookControllerTests extends DemoTestsBase {
         String invalidCategory = "Java@#$$%";
 
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(invalidTitle).author(invalidAuthor).category(invalidCategory)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(invalidTitle)
+                .author(invalidAuthor)
+                .category(invalidCategory)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookCreateInput))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -164,10 +171,14 @@ class BookControllerTests extends DemoTestsBase {
         String url = "/books/v1/";
         // Prepare
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
-        MockHttpServletRequestBuilder requestBuilder = post(url).contentType(APPLICATION_JSON)
+        MockHttpServletRequestBuilder requestBuilder = post(url)
+                .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookCreateInput))
                 .accept(APPLICATION_JSON);
         // execute and assert
@@ -186,12 +197,16 @@ class BookControllerTests extends DemoTestsBase {
     }
 
     @Test
-    void test_api_update_book() throws Exception  {
+    void test_api_update_book() throws Exception {
         String url = "/books/v1/1";
         // Prepare
         BookUpdateInput bookUpdateInput = BookUpdateInput.builder()
-                .title(randomTitle()).author(AUTHOR).category(CATEGORY)
-                .price(PRICE_V2).amount(AMOUNT_V2).build();
+                .title(randomTitle())
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE_V2)
+                .amount(AMOUNT_V2)
+                .build();
         //
         MockHttpServletRequestBuilder requestBuilder = put(url).contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookUpdateInput))
@@ -213,7 +228,6 @@ class BookControllerTests extends DemoTestsBase {
                         Assertions.assertEquals(bookUpdateInput.getCategory(), bookInfo.getCategory());
                     }
                 });
-
     }
 
     @Test
@@ -225,8 +239,12 @@ class BookControllerTests extends DemoTestsBase {
         String invalidCategory = "Java@#$$%";
 
         BookUpdateInput updateInput = BookUpdateInput.builder()
-                .title(invalidTitle).author(invalidAuthor).category(invalidCategory)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(invalidTitle)
+                .author(invalidAuthor)
+                .category(invalidCategory)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         //
         MockHttpServletRequestBuilder requestBuilder = put(url).contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateInput))
@@ -247,17 +265,20 @@ class BookControllerTests extends DemoTestsBase {
     }
 
     @Test
-    void test_api_find_available_books() throws Exception  {
+    void test_api_find_available_books() throws Exception {
         // Prepare Data
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(randomTitle()).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(randomTitle())
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         BookInfo bookInfoCreated = bookService.create(bookCreateInput);
         //
         String url = "/books/v1/0/10";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -267,7 +288,8 @@ class BookControllerTests extends DemoTestsBase {
                     public void match(MvcResult result) throws Exception {
                         String content = result.getResponse().getContentAsString();
                         //
-                        TypeReference<PageableOutput<BookInfo>> typeRef = new TypeReference<PageableOutput<BookInfo>>() {};
+                        TypeReference<PageableOutput<BookInfo>> typeRef =
+                                new TypeReference<PageableOutput<BookInfo>>() {};
                         PageableOutput<BookInfo> pageableOutput = objectMapper.readValue(content, typeRef);
                         //
                         Assertions.assertTrue(pageableOutput.getTotalItems() > 0);
@@ -281,17 +303,20 @@ class BookControllerTests extends DemoTestsBase {
     }
 
     @Test
-    void test_api_find_available_books_incorrect_pageIndex_should_return_empty() throws Exception  {
+    void test_api_find_available_books_incorrect_pageIndex_should_return_empty() throws Exception {
         // Prepare Data
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(TITLE).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(TITLE)
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         bookService.create(bookCreateInput);
         //
         String url = "/books/v1/10000/10";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -301,7 +326,8 @@ class BookControllerTests extends DemoTestsBase {
                     public void match(MvcResult result) throws Exception {
                         String content = result.getResponse().getContentAsString();
                         //
-                        TypeReference<PageableOutput<BookInfo>> typeRef = new TypeReference<PageableOutput<BookInfo>>() {};
+                        TypeReference<PageableOutput<BookInfo>> typeRef =
+                                new TypeReference<PageableOutput<BookInfo>>() {};
                         PageableOutput<BookInfo> pageableOutput = objectMapper.readValue(content, typeRef);
                         //
                         Assertions.assertTrue(pageableOutput.getItems().isEmpty());
@@ -310,19 +336,22 @@ class BookControllerTests extends DemoTestsBase {
     }
 
     @Test
-    void test_api_find_available_books_deActive_should_not_include() throws Exception  {
+    void test_api_find_available_books_deActive_should_not_include() throws Exception {
         // Prepare Data
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(randomTitle()).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(randomTitle())
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         BookInfo bookInfoExclude = bookService.create(bookCreateInput);
         // change status
         bookService.updateStatus(bookInfoExclude.getId(), false);
         // execute query
         String url = "/books/v1/0/10";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -332,10 +361,13 @@ class BookControllerTests extends DemoTestsBase {
                     public void match(MvcResult result) throws Exception {
                         String content = result.getResponse().getContentAsString();
                         //
-                        TypeReference<PageableOutput<BookInfo>> typeRef = new TypeReference<PageableOutput<BookInfo>>() {};
+                        TypeReference<PageableOutput<BookInfo>> typeRef =
+                                new TypeReference<PageableOutput<BookInfo>>() {};
                         PageableOutput<BookInfo> pageableOutput = objectMapper.readValue(content, typeRef);
                         //
-                        pageableOutput.getItems().forEach(bookInfo -> assertNotEquals(bookInfo.getId(), bookInfoExclude.getId()));
+                        pageableOutput
+                                .getItems()
+                                .forEach(bookInfo -> assertNotEquals(bookInfo.getId(), bookInfoExclude.getId()));
                     }
                 });
     }
@@ -344,13 +376,16 @@ class BookControllerTests extends DemoTestsBase {
     void test_api_get_book_detail() throws Exception {
         // Prepare Data
         BookCreateInput bookCreateInput = BookCreateInput.builder()
-                .title(randomTitle()).author(AUTHOR).category(CATEGORY)
-                .price(PRICE).amount(AMOUNT).build();
+                .title(randomTitle())
+                .author(AUTHOR)
+                .category(CATEGORY)
+                .price(PRICE)
+                .amount(AMOUNT)
+                .build();
         BookInfo bookInfoExpect = bookService.create(bookCreateInput);
         //
         String url = "/books/v1/" + bookInfoExpect.getId();
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -375,8 +410,7 @@ class BookControllerTests extends DemoTestsBase {
         //
         String url = "/books/v1/1000000";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())

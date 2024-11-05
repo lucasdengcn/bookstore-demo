@@ -1,12 +1,13 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.configuration;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = "app.file.directory=public/images/")
 class BookstoreConfigTests {
@@ -25,5 +26,4 @@ class BookstoreConfigTests {
         assertEquals("public/images/", bookstoreProperties.getFile().getDirectory());
         System.out.println(bookstoreProperties.getRelativePath());
     }
-
 }

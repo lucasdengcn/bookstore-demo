@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.service;
 
 import com.example.demo.bookstore.configuration.BookstoreProperties;
@@ -11,7 +13,13 @@ import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
 import com.example.demo.bookstore.model.output.PageableOutput;
 import com.example.demo.bookstore.repository.BookRepository;
-
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
@@ -21,14 +29,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -40,16 +40,14 @@ public class BookService {
 
     private final BookstoreProperties bookstoreProperties;
 
-    public BookService(BookRepository bookRepository,
-                       BookMapper bookMapper,
-                       BookstoreProperties bookstoreProperties) {
+    public BookService(BookRepository bookRepository, BookMapper bookMapper, BookstoreProperties bookstoreProperties) {
         this.bookRepository = bookRepository;
         this.bookMapper = bookMapper;
         this.bookstoreProperties = bookstoreProperties;
     }
 
     // create a book
-    public BookInfo create(BookCreateInput input){
+    public BookInfo create(BookCreateInput input) {
         log.debug("create book: {}", input);
         Book book = bookMapper.toBook(input);
         book.setActive(true);
@@ -58,7 +56,7 @@ public class BookService {
     }
 
     // update a book
-    public BookInfo update(Integer id, BookUpdateInput input){
+    public BookInfo update(Integer id, BookUpdateInput input) {
         log.debug("update book: {}, {}", id, input);
         Book book = bookMapper.toBook(input, id);
         book = bookRepository.save(book);
@@ -66,7 +64,7 @@ public class BookService {
     }
 
     // update a book status only
-    public BookInfo updateStatus(Integer id, boolean active){
+    public BookInfo updateStatus(Integer id, boolean active) {
         log.debug("update book status: {}, {}", id, active);
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
         book.setActive(active);
@@ -80,7 +78,7 @@ public class BookService {
      * @param size
      * @return
      */
-    public PageableOutput<BookInfo> findAvailableBooks(int page, int size){
+    public PageableOutput<BookInfo> findAvailableBooks(int page, int size) {
         //
         Pageable pageable = PageRequest.ofSize(size).withPage(page).withSort(Sort.by(Sort.Order.desc("id")));
         Page<Book> bookList = bookRepository.findByActive(true, pageable);
@@ -104,33 +102,33 @@ public class BookService {
     }
 
     // get book detail
-    public BookInfo findById(Integer id){
+    public BookInfo findById(Integer id) {
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
         return bookMapper.toBookInfo(book);
     }
 
     @EventListener
-    public void onBookAddedIntoCartEvent(BookAddedIntoCart event){
+    public void onBookAddedIntoCartEvent(BookAddedIntoCart event) {
         log.info("Receive added event: {}", event);
-        if (null != event){
-            if (event.getBookId() > 0 && event.getAmount() > 0){
+        if (null != event) {
+            if (event.getBookId() > 0 && event.getAmount() > 0) {
                 offsetAmounts(event.getBookId(), -1 * event.getAmount());
             }
         }
     }
 
     @EventListener
-    public void onBookRemovedFromCartEvent(BookRemovedFromCart event){
+    public void onBookRemovedFromCartEvent(BookRemovedFromCart event) {
         log.info("Receive removed event: {}", event);
-        if (null != event){
-            if (event.getBookId() > 0 && event.getAmount() > 0){
+        if (null != event) {
+            if (event.getBookId() > 0 && event.getAmount() > 0) {
                 offsetAmounts(event.getBookId(), event.getAmount());
             }
         }
     }
 
     public List<BookInfo> findByIds(Set<Integer> bookIds) {
-        if (null == bookIds || bookIds.isEmpty()){
+        if (null == bookIds || bookIds.isEmpty()) {
             return Collections.emptyList();
         }
         //
@@ -156,5 +154,4 @@ public class BookService {
         book = bookRepository.save(book);
         return bookMapper.toBookInfo(book);
     }
-
 }

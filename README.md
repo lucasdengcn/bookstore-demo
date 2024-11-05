@@ -26,6 +26,8 @@ To simplify demo, here putting book service and cart service into one project.
 - Flyway
 - RFC-9457
 - Version Catalog
+- Checkstyle
+- Spotless
 
 ## Error Response
 
@@ -124,4 +126,5 @@ https://github.com/redis/lettuce/wiki/Connection-Pooling
 - Distributed Lock
 - Custom Metrics
 - Auto reload yaml file and refresh properties bean
-
+- Checkstyle (https://checkstyle.sourceforge.io/google_style.html)
+- Spotless https://github.com/diffplug/spotless/tree/main/plugin-gradle#requirements

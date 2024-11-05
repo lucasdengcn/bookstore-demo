@@ -1,5 +1,9 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.configuration;
 
+import java.beans.Transient;
+import java.io.IOException;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -7,10 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassRelativeResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
-
-import java.beans.Transient;
-import java.io.IOException;
 
 @Data
 @Configuration

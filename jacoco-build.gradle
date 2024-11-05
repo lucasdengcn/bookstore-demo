@@ -1,54 +1,54 @@
 jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true
-        csv.required = false
-        html.required = true
-    }
+	dependsOn test
+	reports {
+		xml.required = true
+		csv.required = false
+		html.required = true
+	}
 }
 
 // enforce 50% both at class and at project level for verifying tool setup
 jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.8
-            }
-        }
+	violationRules {
+		rule {
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.8
+			}
+		}
 
-        rule {
-            enabled = true
-            element = 'CLASS'
-            //includes = ['org.gradle.*']
+		rule {
+			enabled = true
+			element = 'CLASS'
+			//includes = ['org.gradle.*']
 
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                maximum = 1.0
-            }
-        }
-    }
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				maximum = 1.0
+			}
+		}
+	}
 }
 
 check {
-    dependsOn jacocoTestCoverageVerification
+	dependsOn jacocoTestCoverageVerification
 }
 
 test {
-    jacoco {
-        enabled = true
-        destinationFile = layout.buildDirectory.file("jacoco/${name}.exec").get().asFile
-        includes = []
-        excludes = []
-        excludeClassLoaders = []
-        includeNoLocationClasses = false
-        dumpOnExit = true
-        classDumpDir = null
-        output = JacocoTaskExtension.Output.FILE
-        jmx = false
-    }
+	jacoco {
+		enabled = true
+		destinationFile = layout.buildDirectory.file("jacoco/${name}.exec").get().asFile
+		includes = []
+		excludes = []
+		excludeClassLoaders = []
+		includeNoLocationClasses = false
+		dumpOnExit = true
+		classDumpDir = null
+		output = JacocoTaskExtension.Output.FILE
+		jmx = false
+	}
 }
 
 test.finalizedBy jacocoTestReport

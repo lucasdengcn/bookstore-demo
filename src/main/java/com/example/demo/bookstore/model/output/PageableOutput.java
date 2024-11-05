@@ -1,13 +1,14 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.model.output;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Schema(description = "pageable list")
 @Data
@@ -37,7 +38,7 @@ public class PageableOutput<T> {
     @Schema(description = "would the list reach to the head.")
     private boolean hasPreviousPage;
 
-    public PageableOutput(List<T> items, Page<?> page, int pageIndex, int pageSize){
+    public PageableOutput(List<T> items, Page<?> page, int pageIndex, int pageSize) {
         this.items = items;
         this.pageSize = pageSize;
         this.pageIndex = pageIndex;
@@ -46,5 +47,4 @@ public class PageableOutput<T> {
         this.hasNextPage = page.hasNext();
         this.hasPreviousPage = page.hasPrevious();
     }
-
 }

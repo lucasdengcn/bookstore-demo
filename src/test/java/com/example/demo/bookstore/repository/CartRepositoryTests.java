@@ -1,23 +1,22 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.repository;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.service.CartService;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CartRepositoryTests extends DemoTestsBase {
 
@@ -34,11 +33,13 @@ class CartRepositoryTests extends DemoTestsBase {
     }
 
     @BeforeEach
-    void setup(){
+    void setup() {
         // prepare a book
-        bookInit = Book.builder().title(randomTitle())
+        bookInit = Book.builder()
+                .title(randomTitle())
                 .id(faker.random().nextInt(100, 100000))
-                .author("James smith").category("JAVA")
+                .author("James smith")
+                .category("JAVA")
                 .active(true)
                 .amount(100)
                 .price(BigDecimal.valueOf(50.20))
@@ -55,12 +56,12 @@ class CartRepositoryTests extends DemoTestsBase {
     }
 
     @AfterEach
-    void cleanUp(){
+    void cleanUp() {
         cartRepository.deleteById(cartInit.getId());
     }
 
     @Test
-    void test_create_cart(){
+    void test_create_cart() {
         Cart cart = Cart.builder()
                 .price(BigDecimal.valueOf(10.0))
                 .bookId(faker.random().nextInt(1, 100000))
@@ -74,7 +75,7 @@ class CartRepositoryTests extends DemoTestsBase {
     }
 
     @Test
-    void test_find_by_user_and_book(){
+    void test_find_by_user_and_book() {
         Cart cart = cartRepository.findByUserIdAndBookId(CartService.currentUserId, bookInit.getId());
         Assertions.assertEquals(cartInit.getId(), cart.getId());
         Assertions.assertEquals(cartInit.getBookId(), cart.getBookId());
@@ -82,7 +83,7 @@ class CartRepositoryTests extends DemoTestsBase {
     }
 
     @Test
-    void test_offset_amount_incr(){
+    void test_offset_amount_incr() {
         cartRepository.offsetAmount(cartInit.getId(), 2);
         //
         Cart cart = cartRepository.findById(cartInit.getId()).orElseThrow();
@@ -93,7 +94,7 @@ class CartRepositoryTests extends DemoTestsBase {
     }
 
     @Test
-    void test_offset_amount_decr(){
+    void test_offset_amount_decr() {
         cartRepository.offsetAmount(cartInit.getId(), 2);
         //
         Cart cart = cartRepository.findById(cartInit.getId()).orElseThrow();
@@ -108,23 +109,24 @@ class CartRepositoryTests extends DemoTestsBase {
     }
 
     @Test
-    void test_find_by_userId(){
+    void test_find_by_userId() {
         List<Cart> cartList = cartRepository.findByUserId(cartInit.getUserId());
         Assertions.assertFalse(cartList.isEmpty());
-        long count = cartList.stream().filter(cart -> Objects.equals(cart.getUserId(), cartInit.getUserId())).count();
+        long count = cartList.stream()
+                .filter(cart -> Objects.equals(cart.getUserId(), cartInit.getUserId()))
+                .count();
         Assertions.assertTrue(count > 0);
     }
 
     @Test
-    void test_sum_of_price_zero_when_empty(){
+    void test_sum_of_price_zero_when_empty() {
         cartRepository.deleteAll();
         BigDecimal sum = cartRepository.getTotalPrice(cartInit.getUserId());
         Assertions.assertNull(sum);
     }
 
-
     @Test
-    void test_sum_of_gte_zero_when_added(){
+    void test_sum_of_gte_zero_when_added() {
         cartRepository.offsetAmount(cartInit.getId(), 2);
         Cart cart = cartRepository.findById(cartInit.getId()).orElseThrow();
         System.out.println(cart);
@@ -134,5 +136,4 @@ class CartRepositoryTests extends DemoTestsBase {
         Assertions.assertEquals(expected, sum);
         //
     }
-
 }

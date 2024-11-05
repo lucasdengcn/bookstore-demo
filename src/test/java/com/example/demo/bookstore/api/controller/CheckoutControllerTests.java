@@ -1,27 +1,26 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.model.output.CartSummary;
 import com.example.demo.bookstore.repository.CartRepository;
 import com.example.demo.bookstore.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.datafaker.Faker;
+import java.math.BigDecimal;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 class CheckoutControllerTests extends DemoTestsBase {
@@ -45,8 +44,7 @@ class CheckoutControllerTests extends DemoTestsBase {
         //
         String url = "/checkouts/v1/summary";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -59,7 +57,6 @@ class CheckoutControllerTests extends DemoTestsBase {
                         Assertions.assertTrue(cartSummary.getTotal().compareTo(BigDecimal.ZERO) > 0);
                     }
                 });
-
     }
 
     @Test
@@ -67,8 +64,7 @@ class CheckoutControllerTests extends DemoTestsBase {
         //
         String url = "/checkouts/v1/summary";
         //
-        MockHttpServletRequestBuilder requestBuilder = get(url)
-                .accept(APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = get(url).accept(APPLICATION_JSON);
         // execute and assert
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -81,6 +77,5 @@ class CheckoutControllerTests extends DemoTestsBase {
                         assertEquals(1, cartSummary.getTotal().compareTo(BigDecimal.ZERO));
                     }
                 });
-
     }
 }

@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,7 @@ public class MyRefreshListener implements ApplicationListener<EnvironmentChangeE
     @Override
     public void onApplicationEvent(EnvironmentChangeEvent event) {
         log.info("refresh event: {}", event.getKeys());
-        if(event.getKeys().contains("app.rules")) {
+        if (event.getKeys().contains("app.rules")) {
             refreshScopedService.refresh();
         }
     }

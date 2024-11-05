@@ -1,13 +1,14 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.repository;
 
 import com.example.demo.bookstore.entity.Cart;
+import java.math.BigDecimal;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 public interface CartRepository extends JpaRepository<Cart, Integer> {
     /**
@@ -36,8 +37,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
      */
     List<Cart> findByUserId(int userId);
 
-
     @Query("select sum(c.total) from Cart c where c.userId = ?1")
     BigDecimal getTotalPrice(int userId);
-
 }

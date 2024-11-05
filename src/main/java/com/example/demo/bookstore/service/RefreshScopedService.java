@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.service;
 
 import com.example.demo.bookstore.configuration.BookstoreProperties;
@@ -14,9 +16,7 @@ public class RefreshScopedService {
     private BookstoreProperties bookstoreProperties;
 
     @PostConstruct
-    public void refresh(){
+    public void refresh() {
         log.info("running on : {}", bookstoreProperties.getRules());
     }
-
-
 }

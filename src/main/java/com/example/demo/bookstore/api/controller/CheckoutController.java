@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.controller;
 
 import com.example.demo.bookstore.model.output.CartSummary;
@@ -21,9 +23,8 @@ public class CheckoutController {
     @Operation(description = "checkout current user's cart's summary")
     @GetMapping("/v1/summary")
     @ResponseStatus(HttpStatus.OK)
-    public CartSummary summary(){
+    public CartSummary summary() {
         CartSummary cartSummary = cartService.findByCurrentUserInSummary();
         return cartSummary;
     }
-
 }

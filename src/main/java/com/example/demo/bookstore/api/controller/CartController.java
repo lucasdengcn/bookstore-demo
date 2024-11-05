@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.controller;
 
 import com.example.demo.bookstore.model.input.CartCreateInput;
@@ -9,18 +11,15 @@ import com.example.demo.bookstore.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Shopping Cart APIs")
 @RestController
@@ -47,14 +46,14 @@ public class CartController {
     @Operation(description = "Update cart's amount of a book")
     @PutMapping("/v1/{id}/book")
     @ResponseStatus(HttpStatus.OK)
-    public CartInfo put(@PathVariable("id") Integer id, @ParameterObject @Valid @RequestBody CartUpdateInput input){
+    public CartInfo put(@PathVariable("id") Integer id, @ParameterObject @Valid @RequestBody CartUpdateInput input) {
         return cartService.updateAmount(id, input.getAmount());
     }
 
     @Operation(description = "get items in current user's cart")
     @GetMapping("/v1/books")
     @ResponseStatus(HttpStatus.OK)
-    public List<CartInfo> findCartItems(){
+    public List<CartInfo> findCartItems() {
         List<CartInfo> cartInfoList = cartService.findByCurrentUser();
         //
         Set<Integer> bookIds = cartInfoList.stream().map(CartInfo::getBookId).collect(Collectors.toSet());
@@ -66,5 +65,4 @@ public class CartController {
         //
         return cartInfoList;
     }
-
 }

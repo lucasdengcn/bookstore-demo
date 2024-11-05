@@ -1,3 +1,5 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.configuration;
 
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         log.info("addResourceHandlers: {}", bookstoreProperties);
         String fileDirectory = bookstoreProperties.getFile().getDirectory();
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:" + fileDirectory);
+        registry.addResourceHandler("/uploads/**").addResourceLocations("file:" + fileDirectory);
         log.info("addResourceHandlers DONE. {}", fileDirectory);
     }
 }

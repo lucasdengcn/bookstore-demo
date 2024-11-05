@@ -1,14 +1,15 @@
+/* (C) 2024 */ 
+
 package com.example.demo.bookstore.api.controller;
 
 import com.example.demo.bookstore.lock.DistributedLock;
 import com.example.demo.bookstore.lock.DxLockInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.Duration;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Locks APIs")
 @RestController
@@ -24,7 +25,7 @@ public class LockController {
     @Operation(description = "acquire a dx lock")
     @PostMapping("/v1/acquire")
     @ResponseStatus(HttpStatus.OK)
-    public String acquire(){
+    public String acquire() {
         Optional<String> acquire = distributedLock.acquire("abc", Duration.ofSeconds(20));
         return acquire.orElse("NULL");
     }
@@ -32,7 +33,7 @@ public class LockController {
     @Operation(description = "get a dx lock")
     @GetMapping("/v1/info/{key}")
     @ResponseStatus(HttpStatus.OK)
-    public DxLockInfo info(@PathVariable String key){
+    public DxLockInfo info(@PathVariable String key) {
         Optional<DxLockInfo> acquire = distributedLock.findInCache(key);
         return acquire.orElse(new DxLockInfo());
     }
@@ -40,7 +41,7 @@ public class LockController {
     @Operation(description = "forceRelease a dx lock")
     @DeleteMapping("/v1/info/{key}")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean release(@PathVariable String key){
+    public Boolean release(@PathVariable String key) {
         distributedLock.forceRelease(key);
         return true;
     }
