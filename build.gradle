@@ -120,7 +120,7 @@ spotless {
 	}
 	java {
 		// Use the default importOrder configuration
-		importOrder()
+		importOrderFile('spotless.importorder')
 		removeUnusedImports()
 		cleanthat()
 		palantirJavaFormat()
