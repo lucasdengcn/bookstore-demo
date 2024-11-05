@@ -26,7 +26,7 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
-                maximum = 0.8
+                maximum = 1.0
             }
         }
     }

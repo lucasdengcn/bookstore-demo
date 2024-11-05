@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.mapper;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.model.input.BookCreateInput;
 import com.example.demo.bookstore.model.input.BookUpdateInput;
@@ -15,8 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class BookMapperTests {
+class BookMapperTests extends DemoTestsBase {
 
     public static final String TITLE = "book ABC";
     public static final String AUTHOR = "James";

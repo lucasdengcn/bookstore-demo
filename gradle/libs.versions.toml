@@ -1,0 +1,52 @@
+[versions]
+spring-boot = "3.3.4"
+spring-cloud = "2023.0.3"
+mapstruct = "1.5.5.Final"
+lombok-mapstruct-binding = "0.2.0"
+springdoc-openapi = "2.6.0"
+caffeine = "3.1.8"
+guava = "31.1-jre"
+datafaker = "2.3.1"
+lombok = "1.18.34"
+
+[libraries]
+# spring
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot"}
+spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud" }
+spring-cloud-starter = { module = "org.springframework.cloud:spring-cloud-starter" }
+spring-boot-autoconfigure-processor = { module = "org.springframework.boot:spring-boot-autoconfigure-processor" }
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "spring-boot" }
+#
+spring-boot-starter-actuator = { module = 'org.springframework.boot:spring-boot-starter-actuator' }
+spring-boot-starter-data-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa' }
+spring-boot-starter-data-redis = { module = 'org.springframework.boot:spring-boot-starter-data-redis' }
+spring-boot-starter-validation = { module = 'org.springframework.boot:spring-boot-starter-validation' }
+spring-boot-starter-web = { module = 'org.springframework.boot:spring-boot-starter-web' }
+spring-boot-starter-undertow = { module = 'org.springframework.boot:spring-boot-starter-undertow' }
+jackson-datatype-jsr310 = { module = 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310' }
+#
+flyway = { module = 'org.flywaydb:flyway-core' }
+#
+springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi"}
+#
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine"}
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct"}
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct"}
+lombok-mapstruct-binding = { module = "org.projectlombok:lombok-mapstruct-binding", version.ref = "lombok-mapstruct-binding"}
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+micrometer-tracing = { module = 'io.micrometer:micrometer-tracing' }
+micrometer-registry-prometheus = { module = 'io.micrometer:micrometer-registry-prometheus' }
+# runtime
+h2 = { module = 'com.h2database:h2' }
+# testing
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+junit-platform-launcher = { module = 'org.junit.platform:junit-platform-launcher' }
+datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
+
+[bundles]
+testing = ["spring-boot-starter-test", "junit-platform-launcher", "datafaker"]
+annotation-processor = ["lombok", "lombok-mapstruct-binding", "spring-boot-configuration-processor", "mapstruct-processor"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot"}

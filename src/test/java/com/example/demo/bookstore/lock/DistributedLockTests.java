@@ -1,9 +1,9 @@
 package com.example.demo.bookstore.lock;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -11,10 +11,7 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest()
-class DistributedLockTests {
+class DistributedLockTests extends DemoTestsBase {
 
     @Autowired
     DistributedLock distributedLock;

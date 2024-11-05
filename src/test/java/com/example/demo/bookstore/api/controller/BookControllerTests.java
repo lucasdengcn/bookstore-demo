@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.api.controller;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.model.input.BookCreateInput;
 import com.example.demo.bookstore.model.input.BookUpdateInput;
 import com.example.demo.bookstore.model.output.BookInfo;
@@ -35,9 +36,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
-class BookControllerTests {
+class BookControllerTests extends DemoTestsBase {
 
     public static final String TITLE = "book ABC";
     public static final String AUTHOR = "James";

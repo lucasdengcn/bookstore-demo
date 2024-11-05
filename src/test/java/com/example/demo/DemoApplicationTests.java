@@ -1,13 +1,19 @@
 package com.example.demo;
 
+import com.example.demo.bookstore.DemoTestsBase;
+import com.example.demo.bookstore.configuration.BookstoreProperties;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@SpringBootTest
-class DemoApplicationTests {
+class DemoApplicationTests extends DemoTestsBase {
+
+	@Autowired
+	private BookstoreProperties bookstoreProperties;
 
 	@Test
 	void contextLoads() {
+		Assertions.assertNotNull(bookstoreProperties.getFile());
 	}
 
 }

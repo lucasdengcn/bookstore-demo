@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.api.controller;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.model.input.BookCreateInput;
 import com.example.demo.bookstore.model.input.CartCreateInput;
@@ -33,9 +34,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
 @AutoConfigureMockMvc
-class CartControllerTests {
+class CartControllerTests extends DemoTestsBase {
 
     public static final String APPLICATION_JSON = "application/json";
     public static Faker faker = new Faker();

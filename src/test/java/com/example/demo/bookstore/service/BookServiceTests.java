@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.service;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.event.BookAddedIntoCart;
 import com.example.demo.bookstore.event.BookRemovedFromCart;
@@ -26,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
-class BookServiceTests {
+class BookServiceTests extends DemoTestsBase {
 
     public static final String TITLE = "book ABC";
     public static final String AUTHOR = "James";

@@ -1,8 +1,7 @@
 plugins {
 	id 'java'
 	id 'jacoco'
-	id 'org.springframework.boot' version '3.3.4'
-	id 'io.spring.dependency-management' version '1.1.6'
+	alias(libs.plugins.spring.boot)
 }
 
 group = 'com.example'
@@ -35,51 +34,36 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	set('springCloudVersion', "2023.0.3")
-	set('mapStructVersion', "1.5.5.Final")
-	set('lombokMapstructBindingVersion', "0.2.0")
-}
-
 dependencies {
-	implementation 'org.springframework.cloud:spring-cloud-starter'
-	implementation 'org.springframework.boot:spring-boot-autoconfigure-processor'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-undertow'
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	implementation(platform(libs.spring.boot.dependencies))
+	implementation(platform(libs.spring.cloud.dependencies))
+	implementation libs.spring.cloud.starter
+	implementation libs.spring.boot.autoconfigure.processor
+	implementation libs.spring.boot.starter.actuator
+	implementation libs.spring.boot.starter.data.jpa
+	implementation libs.spring.boot.starter.data.redis
+	implementation libs.spring.boot.starter.validation
+	implementation libs.spring.boot.starter.web
+	implementation libs.spring.boot.starter.undertow
+	implementation libs.jackson.datatype.jsr310
 	//
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+	implementation libs.springdoc.openapi
 	//
-	implementation 'io.micrometer:micrometer-tracing'
-	implementation 'io.micrometer:micrometer-registry-prometheus'
-	// https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
-	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+	implementation libs.micrometer.tracing
+	implementation libs.micrometer.registry.prometheus
+	// cache
+	implementation libs.caffeine
 	//
-	implementation 'com.google.guava:guava:31.1-jre'
-	implementation "org.mapstruct:mapstruct:${mapStructVersion}"
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
+	implementation libs.guava
+	implementation libs.mapstruct
 	//
-	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
-	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	implementation libs.flyway
+	runtimeOnly libs.h2
 	//
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'net.datafaker:datafaker:2.3.1'
-	// testImplementation 'org.wiremock:wiremock:3.5.2'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
+	compileOnly libs.lombok
+	annotationProcessor libs.bundles.annotation.processor
+	//
+	testImplementation libs.bundles.testing
 }
 
 tasks.named('test') {

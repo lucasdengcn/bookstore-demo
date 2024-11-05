@@ -22,9 +22,10 @@ To simplify demo, here putting book service and cart service into one project.
 - Mockito
 - Mapstruct
 - Swagger UI
-- Gradle
+- Gradle 8+
 - Flyway
 - RFC-9457
+- Version Catalog
 
 ## Error Response
 

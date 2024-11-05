@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.mapper;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.model.input.CartCreateInput;
 import com.example.demo.bookstore.model.output.CartInfo;
@@ -12,8 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.List;
 
-@SpringBootTest
-class CartMapperTests {
+class CartMapperTests extends DemoTestsBase {
 
     @Autowired
     CartMapper cartMapper;

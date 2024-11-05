@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.repository;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.*;
@@ -13,8 +14,8 @@ import org.springframework.data.domain.Sort;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@SpringBootTest
-class BookRepositoryTests {
+
+class BookRepositoryTests extends DemoTestsBase {
 
     @Autowired
     BookRepository bookRepository;

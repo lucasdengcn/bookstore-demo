@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.repository;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Book;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.service.CartService;
@@ -18,8 +19,7 @@ import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-class CartRepositoryTests {
+class CartRepositoryTests extends DemoTestsBase {
 
     @Autowired
     CartRepository cartRepository;

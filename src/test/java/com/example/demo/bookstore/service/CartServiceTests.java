@@ -1,5 +1,6 @@
 package com.example.demo.bookstore.service;
 
+import com.example.demo.bookstore.DemoTestsBase;
 import com.example.demo.bookstore.entity.Cart;
 import com.example.demo.bookstore.exception.BookNotAvailableException;
 import com.example.demo.bookstore.exception.EntityNotFoundException;
@@ -25,8 +26,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
-class CartServiceTests {
+class CartServiceTests extends DemoTestsBase {
 
     @Autowired
     CartService cartService;
