@@ -28,6 +28,7 @@ To simplify demo, here putting book service and cart service into one project.
 - Version Catalog
 - Checkstyle
 - Spotless
+- Testcontainers
 
 ## Error Response
 
@@ -129,3 +130,4 @@ https://github.com/redis/lettuce/wiki/Connection-Pooling
 - Checkstyle (https://checkstyle.sourceforge.io/google_style.html)
 - Spotless https://github.com/diffplug/spotless/tree/main/plugin-gradle#requirements
 - API Doc https://springdoc.org/
+- Testcontainers https://testcontainers.com/guides/testing-spring-boot-rest-api-using-testcontainers/

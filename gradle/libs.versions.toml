@@ -9,6 +9,9 @@ guava = "31.1-jre"
 datafaker = "2.3.1"
 lombok = "1.18.34"
 spotless = "6.25.0"
+testcontainers = "1.19.8"
+rest-assured = "5.5.0"
+postgresql = "42.7.4"
 
 [libraries]
 # spring
@@ -41,13 +44,17 @@ micrometer-tracing = { module = 'io.micrometer:micrometer-tracing' }
 micrometer-registry-prometheus = { module = 'io.micrometer:micrometer-registry-prometheus' }
 # runtime
 h2 = { module = 'com.h2database:h2' }
+postgresql = { module = 'org.postgresql:postgresql', version.ref = 'postgresql'}
 # testing
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 junit-platform-launcher = { module = 'org.junit.platform:junit-platform-launcher' }
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
+testcontainers-junit = {module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers"}
+testcontainers-postgresql = {module = "org.testcontainers:postgresql", version.ref = "testcontainers"}
+rest-assured = {module = "io.rest-assured:rest-assured", version.ref = "rest-assured"}
 
 [bundles]
-testing = ["spring-boot-starter-test", "junit-platform-launcher", "datafaker"]
+testing = ["spring-boot-starter-test", "junit-platform-launcher", "datafaker", "testcontainers-junit", "testcontainers-postgresql", "rest-assured"]
 annotation-processor = ["lombok", "lombok-mapstruct-binding", "spring-boot-configuration-processor", "mapstruct-processor"]
 
 [plugins]

@@ -63,6 +63,7 @@ dependencies {
 	//
 	implementation libs.flyway
 	runtimeOnly libs.h2
+	runtimeOnly libs.postgresql
 	//
 	compileOnly libs.lombok
 	annotationProcessor libs.bundles.annotation.processor
