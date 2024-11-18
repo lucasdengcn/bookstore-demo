@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Shopping Cart APIs")
 @RestController
-@RequestMapping("/carts")
+@RequestMapping(value = "/carts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class CartController {
 
@@ -36,17 +36,17 @@ public class CartController {
     }
 
     @Operation(description = "Create a cart on current user")
-    @PostMapping("/v1/book/")
+    @PostMapping(value = "/v1/book/", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public CartInfo create(@ParameterObject @Valid @RequestBody CartCreateInput input) {
+    public CartInfo create(@Valid @RequestBody CartCreateInput input) {
         BookInfo bookInfo = bookService.findById(input.getBookId());
         return cartService.create(input, bookInfo);
     }
 
     @Operation(description = "Update cart's amount of a book")
-    @PutMapping("/v1/{id}/book")
+    @PutMapping(value = "/v1/{id}/book", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public CartInfo put(@PathVariable("id") Integer id, @ParameterObject @Valid @RequestBody CartUpdateInput input) {
+    public CartInfo put(@PathVariable("id") Integer id, @Valid @RequestBody CartUpdateInput input) {
         return cartService.updateAmount(id, input.getAmount());
     }
 

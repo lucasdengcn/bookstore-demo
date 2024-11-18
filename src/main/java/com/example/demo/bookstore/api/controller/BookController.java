@@ -16,12 +16,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Book APIs")
 @RestController
-@RequestMapping("/books")
+@RequestMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class BookController {
 
@@ -32,7 +33,10 @@ public class BookController {
     }
 
     @Operation(description = "Create a book")
-    @PostMapping("/v1/")
+    @PostMapping(
+            value = "/v1/",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public BookInfo create(@Valid @RequestBody BookCreateInput input) {
         BookInfo bookInfo = bookService.create(input);
@@ -42,16 +46,18 @@ public class BookController {
     @Operation(description = "Create a book with cover image")
     @PostMapping(
             value = "/v2/",
-            consumes = {"multipart/form-data"})
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public BookInfo createWithCover(
-            @RequestPart("file") MultipartFile file, @Valid @RequestPart("jsonData") BookCreateInput input) {
+            @RequestPart(value = "file", required = true) MultipartFile file,
+            @Valid @RequestPart(value = "jsonData", required = true)
+                    BookCreateInput input) {
         BookInfo bookInfo = bookService.create(input, file);
         return bookInfo;
     }
 
     @Operation(description = "Update book's information via id-based")
-    @PutMapping("/v1/{id}")
+    @PutMapping(value = "/v1/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public BookInfo put(@PathVariable("id") Integer id, @Valid @RequestBody BookUpdateInput input) {
         return bookService.update(id, input);

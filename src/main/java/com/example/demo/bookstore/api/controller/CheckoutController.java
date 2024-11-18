@@ -7,11 +7,12 @@ import com.example.demo.bookstore.service.CartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Shopping Cart APIs")
 @RestController
-@RequestMapping("/checkouts")
+@RequestMapping(value = "/checkouts", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CheckoutController {
 
     private final CartService cartService;

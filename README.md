@@ -128,3 +128,4 @@ https://github.com/redis/lettuce/wiki/Connection-Pooling
 - Auto reload yaml file and refresh properties bean
 - Checkstyle (https://checkstyle.sourceforge.io/google_style.html)
 - Spotless https://github.com/diffplug/spotless/tree/main/plugin-gradle#requirements
+- API Doc https://springdoc.org/

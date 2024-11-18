@@ -65,7 +65,14 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
-
+    properties:
+      hibernate:
+        generate_statistics: true
+        jdbc:
+          batch_size: 10
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
 
 spring.data.redis:
   database: 0
@@ -75,4 +82,9 @@ spring.data.redis:
 spring.cloud.config:
   enabled: false
   import-check.enabled: false
+
+spring.cache:
+  cache-names: "books, carts"
+  redis:
+    time-to-live: "10m"
 

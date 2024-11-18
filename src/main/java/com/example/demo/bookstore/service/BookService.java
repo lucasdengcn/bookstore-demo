@@ -21,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,6 +59,7 @@ public class BookService {
     }
 
     // update a book
+    // @CacheEvict(value = "books", key = "#id")
     public BookInfo update(Integer id, BookUpdateInput input) {
         log.debug("update book: {}, {}", id, input);
         Book book = bookMapper.toBook(input, id);
@@ -64,6 +68,7 @@ public class BookService {
     }
 
     // update a book status only
+    // @CachePut(value = "books", key = "#id")
     public BookInfo updateStatus(Integer id, boolean active) {
         log.debug("update book status: {}, {}", id, active);
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
@@ -102,6 +107,7 @@ public class BookService {
     }
 
     // get book detail
+    // @Cacheable(cacheNames = "books", key = "#id")
     public BookInfo findById(Integer id) {
         Book book = bookRepository.findById(id).orElseThrow(EntityNotFoundException.BookNotFound(id));
         return bookMapper.toBookInfo(book);
