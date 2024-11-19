@@ -136,9 +136,13 @@ https://github.com/redis/lettuce/wiki/Connection-Pooling
 ## Startup time
 
 Raw executable jar: 3.383 seconds
+
 Unpack executable jar: 2.815 seconds (+16%)
+
 Unpack + CDS executable jar: 1.966 seconds (+30%)
+
 Unpack + CDS + AOT executable jar: 1.54 seconds (+21%)
+
 GraalVM jar: 0.365 seconds (+90%)
 
 ## Hey Benchmark
