@@ -12,6 +12,7 @@ spotless = "6.25.0"
 testcontainers = "1.19.8"
 rest-assured = "5.5.0"
 postgresql = "42.7.4"
+graalvm-native = "0.10.3"
 
 [libraries]
 # spring
@@ -59,4 +60,6 @@ annotation-processor = ["lombok", "lombok-mapstruct-binding", "spring-boot-confi
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot"}
+spring-boot-aot = { id = "org.springframework.boot.aot", version.ref = "spring-boot"}
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless"}
+graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm-native" }

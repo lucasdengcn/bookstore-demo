@@ -15,7 +15,7 @@ import org.springframework.core.io.ResourceLoader;
 @Data
 @Configuration
 @ConfigurationProperties("app")
-@RefreshScope
+// @RefreshScope
 public class BookstoreProperties {
 
     @Data

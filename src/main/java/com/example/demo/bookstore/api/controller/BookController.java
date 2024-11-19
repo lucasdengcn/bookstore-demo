@@ -50,8 +50,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     public BookInfo createWithCover(
             @RequestPart(value = "file", required = true) MultipartFile file,
-            @Valid @RequestPart(value = "jsonData", required = true)
-                    BookCreateInput input) {
+            @Valid @RequestPart(value = "jsonData", required = true) BookCreateInput input) {
         BookInfo bookInfo = bookService.create(input, file);
         return bookInfo;
     }

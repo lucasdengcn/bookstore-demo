@@ -1,0 +1,47 @@
+
+Summary:
+  Total:	1.0527 secs
+  Slowest:	0.1421 secs
+  Fastest:	0.0000 secs
+  Average:	0.0038 secs
+  Requests/sec:	94997.5629
+  
+  Total data:	899991 bytes
+  Size/request:	9 bytes
+
+Response time histogram:
+  0.000 [1]	|
+  0.014 [93936]	|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.028 [2939]	|■
+  0.043 [2598]	|■
+  0.057 [205]	|
+  0.071 [86]	|
+  0.085 [18]	|
+  0.099 [15]	|
+  0.114 [117]	|
+  0.128 [33]	|
+  0.142 [51]	|
+
+
+Latency distribution:
+  10% in 0.0003 secs
+  25% in 0.0006 secs
+  50% in 0.0012 secs
+  75% in 0.0027 secs
+  90% in 0.0081 secs
+  95% in 0.0191 secs
+  99% in 0.0378 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:	0.0000 secs, 0.0000 secs, 0.1421 secs
+  DNS-lookup:	0.0000 secs, 0.0000 secs, 0.0124 secs
+  req write:	0.0000 secs, 0.0000 secs, 0.0270 secs
+  resp wait:	0.0032 secs, 0.0000 secs, 0.1421 secs
+  resp read:	0.0004 secs, 0.0000 secs, 0.0388 secs
+
+Status code distribution:
+  [200]	99999 responses
+
+Error distribution:
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53567->[::1]:8080: read: connection reset by peer
+

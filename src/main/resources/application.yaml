@@ -36,10 +36,10 @@ management:
 server:
   port: 8080
   contextPath: /api
-  undertow:
-    options:
-      server:
-        record-request-start-time: true
+#  undertow:
+#    options:
+#      server:
+#        record-request-start-time: true
 
 # swagger-ui custom path
 springdoc:
@@ -88,3 +88,7 @@ spring.cache:
   redis:
     time-to-live: "10m"
 
+app:
+  file:
+    directory: public/images/
+  rules: rules_002

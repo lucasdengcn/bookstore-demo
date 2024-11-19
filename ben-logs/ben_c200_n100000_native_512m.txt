@@ -1,0 +1,108 @@
+
+Summary:
+  Total:	1.0408 secs
+  Slowest:	0.1525 secs
+  Fastest:	0.0000 secs
+  Average:	0.0019 secs
+  Requests/sec:	96081.4155
+  
+  Total data:	899442 bytes
+  Size/request:	9 bytes
+
+Response time histogram:
+  0.000 [1]	|
+  0.015 [96968]	|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  0.031 [2567]	|■
+  0.046 [165]	|
+  0.061 [76]	|
+  0.076 [49]	|
+  0.091 [39]	|
+  0.107 [11]	|
+  0.122 [25]	|
+  0.137 [33]	|
+  0.152 [4]	|
+
+
+Latency distribution:
+  10% in 0.0002 secs
+  25% in 0.0003 secs
+  50% in 0.0005 secs
+  75% in 0.0011 secs
+  90% in 0.0034 secs
+  95% in 0.0092 secs
+  99% in 0.0203 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:	0.0000 secs, 0.0000 secs, 0.1525 secs
+  DNS-lookup:	0.0000 secs, 0.0000 secs, 0.0021 secs
+  req write:	0.0000 secs, 0.0000 secs, 0.0200 secs
+  resp wait:	0.0015 secs, 0.0000 secs, 0.1481 secs
+  resp read:	0.0002 secs, 0.0000 secs, 0.0339 secs
+
+Status code distribution:
+  [200]	99938 responses
+
+Error distribution:
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53111->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53117->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53118->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53119->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53120->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53121->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53122->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53123->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53124->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53125->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53126->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53127->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53128->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53129->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53130->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53131->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53132->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53133->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53134->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53135->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53136->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53137->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53138->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53139->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53140->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53141->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53142->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53143->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53144->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53145->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53146->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53147->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53148->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53149->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53150->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53151->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53152->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53153->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53154->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53155->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53156->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53157->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53158->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53159->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53160->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53161->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53162->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53163->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53164->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53165->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53166->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53167->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53168->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53169->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53170->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53171->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53172->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53173->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53174->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53175->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53176->[::1]:8080: read: connection reset by peer
+  [1]	Get "http://localhost:8080/rules/v1/": read tcp [::1]:53320->[::1]:8080: read: connection reset by peer
+

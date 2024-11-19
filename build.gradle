@@ -5,6 +5,8 @@ plugins {
 	id 'maven-publish'
 	alias(libs.plugins.spotless)
 	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.boot.aot)
+	// alias(libs.plugins.graalvm.native)
 }
 
 group = 'com.example'
@@ -131,3 +133,11 @@ spotless {
 	}
 }
 
+springBoot {
+	buildInfo()
+}
+
+tasks.named("bootBuildImage") {
+	environment["BPE_DELIM_JAVA_TOOL_OPTIONS"] = " "
+	environment["BPE_APPEND_JAVA_TOOL_OPTIONS"] = "-Dspring.aot.enabled=true"
+}
