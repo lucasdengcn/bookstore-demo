@@ -2,3 +2,4 @@ app:
   file:
     directory: public/images/
   rules: rules_002
+

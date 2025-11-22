@@ -5,7 +5,7 @@ plugins {
 	id 'maven-publish'
 	alias(libs.plugins.spotless)
 	alias(libs.plugins.spring.boot)
-	alias(libs.plugins.spring.boot.aot)
+	// alias(libs.plugins.spring.boot.aot)
 	// alias(libs.plugins.graalvm.native)
 }
 
@@ -22,20 +22,15 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 }
 
 repositories {
-	maven {
-		url 'https://maven.aliyun.com/repository/public/'
-	}
-	maven {
-		url 'https://maven.aliyun.com/repository/spring/'
-	}
-	maven {
-		url 'https://maven.aliyun.com/repository/gradle-plugin'
-	}
 	mavenLocal()
+	maven { url 'https://maven.aliyun.com/repository/central/' }
+	maven { url 'https://maven.aliyun.com/repository/public/' }
+	maven { url 'https://maven.aliyun.com/repository/spring/' }
+	maven { url 'https://maven.aliyun.com/repository/gradle-plugin/' }
+	maven { url 'https://maven.aliyun.com/repository/spring-plugin/' }
 	mavenCentral()
 }
 
@@ -50,7 +45,7 @@ dependencies {
 	implementation libs.spring.boot.starter.cache
 	implementation libs.spring.boot.starter.validation
 	implementation libs.spring.boot.starter.web
-	implementation libs.spring.boot.starter.undertow
+	// implementation libs.spring.boot.starter.undertow
 	implementation libs.jackson.datatype.jsr310
 	//
 	implementation libs.springdoc.openapi
@@ -63,7 +58,7 @@ dependencies {
 	implementation libs.guava
 	implementation libs.mapstruct
 	//
-	implementation libs.flyway
+	// implementation libs.flyway
 	runtimeOnly libs.h2
 	runtimeOnly libs.postgresql
 	//

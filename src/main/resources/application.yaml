@@ -56,13 +56,15 @@ spring:
       enabled: true
   application:
     name: bookstore-demo
-  #
-  datasource:
+
+#
+spring.datasource:
     url: jdbc:h2:mem:bookstore.db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
     username: sa
     password: password
     driverClassName: org.h2.Driver
-  jpa:
+#
+spring.jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
     properties:
@@ -73,6 +75,19 @@ spring:
           batch_versioned_data: true
         order_inserts: true
         order_updates: true
+#
+tenancy:
+  datasources:
+    - name: default
+      url: jdbc:h2:mem:bookstore1.db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
+      username: sa
+      password: password
+      driverClassName: org.h2.Driver
+    - name: tenant2
+      url: jdbc:h2:mem:bookstore2.db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;
+      username: sa
+      password: password
+      driverClassName: org.h2.Driver
 
 spring.data.redis:
   database: 0

@@ -1,13 +1,13 @@
 [versions]
-spring-boot = "3.3.4"
-spring-cloud = "2023.0.3"
-mapstruct = "1.5.5.Final"
+spring-boot = "3.5.7"
+spring-cloud = "2025.0.0"
+mapstruct = "1.6.3"
 lombok-mapstruct-binding = "0.2.0"
-springdoc-openapi = "2.6.0"
+springdoc-openapi-starter-webmvc-ui = "2.8.14"
 caffeine = "3.1.8"
 guava = "31.1-jre"
 datafaker = "2.3.1"
-lombok = "1.18.34"
+lombok = "1.18.42"
 spotless = "6.25.0"
 testcontainers = "1.19.8"
 rest-assured = "5.5.0"
@@ -33,7 +33,7 @@ jackson-datatype-jsr310 = { module = 'com.fasterxml.jackson.datatype:jackson-dat
 #
 flyway = { module = 'org.flywaydb:flyway-core' }
 #
-springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi"}
+springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi-starter-webmvc-ui"}
 #
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine"}
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
