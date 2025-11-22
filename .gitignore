@@ -42,3 +42,4 @@ logs
 *.log
 bookstore-demo-0.0.1-SNAPSHOT
 application
+.DS_Store
